@@ -1,8 +1,11 @@
 package Glavni;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -17,11 +20,21 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Label label = new Label("Test JavaFX");
-        StackPane root = new StackPane(label);
-        Scene scene = new Scene(root, 400, 300);
+        // Testiranje JavaFX
+        VBox vBox = new VBox();
 
-        primaryStage.setTitle("Test JavaFX");
+        Label label = new Label("FX test");
+        label.setFont(new Font("Arial", 20));
+        vBox.getChildren().add(label);
+
+        Button dugme = new Button("Pritisni");
+        dugme.setStyle("-fx-font: 20 arial; -fx-base: #b6e7c9;");
+        vBox.getChildren().add(dugme);
+
+        // Kreiranje scene i prikaz
+        Scene scene = new Scene(vBox, 400, 300);
+
+        primaryStage.setTitle("Test JavaFX vBox");
         primaryStage.setScene(scene);
         primaryStage.show();
 

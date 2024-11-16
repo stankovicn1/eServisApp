@@ -3,9 +3,7 @@ package Glavni;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -26,7 +24,7 @@ public class MojGUI {
     }
 
     public Scene getscene2(Stage stage){
-        // Drugi prozor
+        // Drugi prozor za prijavu
         Label labeldvojka = new Label("Unesi lozinku");
         labeldvojka.setFont(new Font("Arial", 35));
 
@@ -49,7 +47,7 @@ public class MojGUI {
     }
 
     public Scene getscene3(Stage stage){
-        // Treci prozor
+        // Treci prozor sa opcijama za Novi unos i Evidenciju kao i za zatvaranje aplikacije
         Button unosServis = new Button("Novi unos");
         unosServis.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
@@ -59,11 +57,60 @@ public class MojGUI {
         Button zatvori = new Button("Izlaz");
         zatvori.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
+        unosServis.setOnAction(e -> stage.setScene(getscenaZaUnos(stage)));
         zatvori.setOnAction(e -> Platform.exit()); // Zatvara aplikaciju
 
         VBox treciProzor = new VBox(35,unosServis,evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);
         return new Scene(treciProzor, 700,400);
+
+    }
+
+    public Scene getscenaZaUnos(Stage stage){
+        //Prozor za Novi unos
+
+        Label markaL = new Label("Unesite marku");
+        TextField marka = new TextField();
+        marka.setPromptText("Unesite marku automobila");
+
+        Label modelL = new Label("Unesite model");
+        TextField model = new TextField();
+        model.setPromptText("Unesite model automobila");
+
+        Label godisteL = new Label("Unesite godiste");
+        TextField godiste = new TextField();
+        godiste.setPromptText("Unesite godiste");
+
+        godiste.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                godiste.setText(oldValue);
+            }
+        });
+
+        Label registracijaL = new Label("Unesite registarske oznake");
+        TextField registracija = new TextField();;
+        registracija.setPromptText("Unesite registarske oznake");
+
+        Label opisL = new Label("Unesite opis");
+        TextArea opis = new TextArea();
+        opis.setPromptText("Unesite opis servisa");
+
+
+        Label datumL = new Label("Izaberite datum");
+        DatePicker datum = new DatePicker();
+        datum.setPromptText("Izaberite datum");
+
+        Button nazad = new Button("Nazad");
+        nazad.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+
+        Button unos = new Button("Potrvdi");
+        unos.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+
+        nazad.setOnAction(e -> stage.setScene(getscene3(stage)));
+
+        VBox noviUnos = new VBox(20,  markaL,marka, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis, unos, nazad);
+        noviUnos.setAlignment(Pos.CENTER);
+        return new Scene(noviUnos, 900, 700);
 
     }
 }

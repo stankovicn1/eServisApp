@@ -11,8 +11,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Main extends Application {
     public static void main(String[] args) {
+
+        DbKonekcija.getConnection();
+
         // Pokrece JavaFX aplikaciju
         launch(args);
     }
@@ -25,5 +31,8 @@ public class Main extends Application {
         primaryStage.setTitle("eServis");
         primaryStage.show();
 
+    }
+    public void stop() {
+        DbKonekcija.closeConnection();
     }
 }

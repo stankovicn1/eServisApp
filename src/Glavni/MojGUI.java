@@ -32,19 +32,45 @@ public class MojGUI {
         lozinka.setPromptText("Unesite lozinku");
 
         Button dugme2 = new Button("Nazad");
-        dugme2.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugme2.setStyle("-fx-font: 28 arial; -fx-background-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         Button dugmePrijava = new Button("Potvrdi");
-        dugmePrijava.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugmePrijava.setStyle("-fx-font: 28 arial; -fx-background-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
+// Konekcija sa bazom i proveru lozinke
+        ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreiraj objekat za proveru lozinke
+
+// Definisanje akcije na dugme "Potvrdi"
+        dugmePrijava.setOnAction(e -> {
+            String unesenaLozinka = lozinka.getText(); // Uzmi unesenu lozinku iz polja
+
+            // Pozivanje metode za proveru lozinke
+            if (proveraLozinke.checkPassword(unesenaLozinka)) {
+                // Ako je lozinka tačna, prelazak na sledeću scenu
+                stage.setScene(getscene3(stage)); // Prelazak na sledeću scenu
+            } else {
+                // Ako je lozinka pogrešna, prikaži poruku o grešci
+                prikaziPoruku("Greška", "Pogrešna lozinka.");
+            }
+        });
+
+// Akcija za dugme "Nazad"
         dugme2.setOnAction(e -> stage.setScene(getscene(stage)));
-        dugmePrijava.setOnAction(e -> stage.setScene(getscene3(stage)));
 
-        VBox vBoxdvojka = new VBox(35,labeldvojka,lozinka, dugmePrijava, dugme2);
+// Kreiranje VBox layout-a
+        VBox vBoxdvojka = new VBox(35, labeldvojka, lozinka, dugmePrijava, dugme2);
         vBoxdvojka.setAlignment(Pos.CENTER);
         return new Scene(vBoxdvojka, 700, 400);
 
     }
+    // Metoda koja prikazuje poruku u alert dijalogu
+    private void prikaziPoruku(String naslov, String poruka) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(naslov);
+        alert.setContentText(poruka);
+        alert.showAndWait();
+    }
+
 
     public Scene getscene3(Stage stage){
         // Treci prozor sa opcijama za Novi unos i Evidenciju kao i za zatvaranje aplikacije

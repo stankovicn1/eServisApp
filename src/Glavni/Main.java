@@ -1,23 +1,11 @@
 package Glavni;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class Main extends Application {
     public static void main(String[] args) {
 
-        DbKonekcija.getConnection();
+        DbKonekcija.getConnection(); // Pozivanje singleton klase za konekciju
 
         // Pokrece JavaFX aplikaciju
         launch(args);
@@ -34,5 +22,5 @@ public class Main extends Application {
     }
     public void stop() {
         DbKonekcija.closeConnection();
-    }
+    } // Poziva metodu singleton klase za zatvaranje konekcije
 }

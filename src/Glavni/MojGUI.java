@@ -10,13 +10,14 @@ import javafx.stage.Stage;
 
 public class MojGUI {
     public Scene getscene(Stage stage){
-        // Prvi prozor
+        // Prvi prozor , pocetni prozor sa naslovom i dugmetom koje vodi na prozor za prijavu
+
         Label label = new Label("eServisnaKnjizica"); // Kreira labelu
         label.setFont(new Font("Arial", 55)); // Postavlja font i velicinu
 
         Button dugme = new Button("Prijavi se"); // Kreira dugme koje vodi na stranicu za prijavu
         dugme.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; "); // Stil dugmeta
-        dugme.setOnAction(e -> stage.setScene(getscene2(stage))); // Postavlja prelaz na scene2 klikom na dugme
+        dugme.setOnAction(e -> stage.setScene(getscene2(stage))); // Postavlja prelaz na prozor za prijavu klikom na dugme
         VBox vbox = new VBox(35, label, dugme); // Kreira VBox i prosledjuje razmak izmedju elemenata i elemente
         vbox.setAlignment(Pos.CENTER); // Pozicionira vBox na centar
         return new Scene(vbox, 700, 400); // vraca Scenu
@@ -32,39 +33,39 @@ public class MojGUI {
         lozinka.setPromptText("Unesite lozinku");
 
         Button dugme2 = new Button("Nazad");
-        dugme2.setStyle("-fx-font: 28 arial; -fx-background-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugme2.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         Button dugmePrijava = new Button("Potvrdi");
-        dugmePrijava.setStyle("-fx-font: 28 arial; -fx-background-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugmePrijava.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
-// Konekcija sa bazom i proveru lozinke
-        ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreiraj objekat za proveru lozinke
 
-// Definisanje akcije na dugme "Potvrdi"
-        dugmePrijava.setOnAction(e -> {
+        ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreira instancu klase ProveraLozinke, da bi pozvali metodu iste klase dalje u nastavku
+
+
+        dugmePrijava.setOnAction(e -> { // Postavljamo akciju za dugme za rijavu koje treba da proveri da li je uneta lozinka ista kao i lozinka iz tabele korisnici u bazi
             String unesenaLozinka = lozinka.getText(); // Uzmi unesenu lozinku iz polja
 
-            // Pozivanje metode za proveru lozinke
-            if (proveraLozinke.checkPassword(unesenaLozinka)) {
-                // Ako je lozinka tačna, prelazak na sledeću scenu
-                stage.setScene(getscene3(stage)); // Prelazak na sledeću scenu
+
+            if (proveraLozinke.checkPassword(unesenaLozinka)) { // Pozivanje metode za proveru lozinke
+
+                stage.setScene(getscene3(stage)); // Ako je lozinka tacna, prelazak na sledecu scenu
             } else {
-                // Ako je lozinka pogrešna, prikaži poruku o grešci
-                prikaziPoruku("Greška", "Pogrešna lozinka.");
+
+                prikaziPoruku("Greška", "Pogrešna lozinka."); // Ako je lozinka pogresna, prikazuje poruku o gresci
             }
         });
 
-// Akcija za dugme "Nazad"
-        dugme2.setOnAction(e -> stage.setScene(getscene(stage)));
 
-// Kreiranje VBox layout-a
+        dugme2.setOnAction(e -> stage.setScene(getscene(stage))); // Dugme nazad koje prelazi na prvi prozor
+
+
         VBox vBoxdvojka = new VBox(35, labeldvojka, lozinka, dugmePrijava, dugme2);
         vBoxdvojka.setAlignment(Pos.CENTER);
         return new Scene(vBoxdvojka, 700, 400);
 
     }
-    // Metoda koja prikazuje poruku u alert dijalogu
-    private void prikaziPoruku(String naslov, String poruka) {
+
+    private void prikaziPoruku(String naslov, String poruka) { // Metoda za prikaz poruke tipa Alert
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(naslov);
         alert.setContentText(poruka);
@@ -84,7 +85,7 @@ public class MojGUI {
         zatvori.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         unosServis.setOnAction(e -> stage.setScene(getscenaZaUnos(stage)));
-        zatvori.setOnAction(e -> Platform.exit()); // Zatvara aplikaciju
+        zatvori.setOnAction(e -> Platform.exit()); // Zatvara aplikaciju metoda exit()
 
         VBox treciProzor = new VBox(35,unosServis,evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);

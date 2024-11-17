@@ -42,8 +42,8 @@ public class MojGUI {
         ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreira instancu klase ProveraLozinke, da bi pozvali metodu iste klase dalje u nastavku
 
 
-        dugmePrijava.setOnAction(e -> { // Postavljamo akciju za dugme za rijavu koje treba da proveri da li je uneta lozinka ista kao i lozinka iz tabele korisnici u bazi
-            String unesenaLozinka = lozinka.getText(); // Uzmi unesenu lozinku iz polja
+        dugmePrijava.setOnAction(e -> { // Postavljamo akciju za dugme za prijavu koje treba da proveri da li je uneta lozinka ista kao i lozinka iz tabele korisnici u bazi
+            String unesenaLozinka = lozinka.getText(); // Uzima unesenu lozinku iz polja
 
 
             if (proveraLozinke.checkPassword(unesenaLozinka)) { // Pozivanje metode za proveru lozinke

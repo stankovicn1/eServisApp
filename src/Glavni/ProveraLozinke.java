@@ -17,7 +17,7 @@ public class ProveraLozinke {
             pstmt.setString(1, "admin"); // Postavlja vrednost za ime korisnika " admin "
             pstmt.setString(2, password); // Postavlja vrednost za lozinku na vrednost koju korisnik unese u passwordField
             ResultSet rs = pstmt.executeQuery(); // Izvrsava upit i dobija rezultat kao ResultSet
-            isValid = rs.next(); // Ako postoji bar jedan red u rezultatu , to znaci da je lozinka validna
+            isValid = rs.next(); // Ako upit vrati bar jedan red sto zanci da postoji korisnik sa imenom " admin " i tacnom lozinkom, metoda vraca true sto znaci da je lozinka tacnas
             rs.close(); // Zatvara ReslutSet da bi oslobodio resurse
             pstmt.close(); // Zatvara PreparedStatement kako bi oslobodio resurse
         } catch (SQLException e) { // Ako dodje do greske ispisuje je

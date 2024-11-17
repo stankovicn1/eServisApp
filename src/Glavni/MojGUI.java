@@ -65,7 +65,6 @@ public class MojGUI {
         return new Scene(treciProzor, 700,400);
 
     }
-
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos
 

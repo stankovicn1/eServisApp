@@ -8,14 +8,14 @@ import java.sql.SQLException;
 public class ProveraLozinke {
 
     public boolean checkPassword(String password) {
-        try (Connection connection = DbKonekcija.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(
+        try (Connection connection = DbKonekcija.getConnection(); // Kreiranje konekcije
+             PreparedStatement pstmt = connection.prepareStatement( // Priprema SQL upita
                      "SELECT 1 FROM korisnici WHERE ime = ? AND lozinka = ?")) {
 
             pstmt.setString(1, "admin");
             pstmt.setString(2, password);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = pstmt.executeQuery()) { // Izvrsava upit i vraca rezultat u vidu ResultSet objekta
                 return rs.next(); // Vraca true ako postoji korisnik sa ovim podacima
             }
 
@@ -23,7 +23,7 @@ public class ProveraLozinke {
             e.printStackTrace();
         }
 
-        return false; // Vraca false u slucaju greske ili neispravnih podataka
+        return false;
     }
 
 }

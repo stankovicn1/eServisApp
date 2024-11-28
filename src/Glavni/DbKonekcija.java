@@ -18,7 +18,7 @@ public class DbKonekcija {
             System.err.println("Greska prilikom koneckcije na bazu " + e.getMessage()); // Ako je konekcija neuspesna prikazuje poruku
             e.printStackTrace(); // Ispisuje detalje o gresci
         }
-        return connection; // Vraca konekciju koja moze da bude nova ili postojeva
+        return connection; // Vraca konekciju koja moze da bude nova ili postojeca
     }
 
     public static void closeConnection() { // Metoda koja zatvara konekciju

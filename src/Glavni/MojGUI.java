@@ -16,7 +16,7 @@ public class MojGUI {
         label.setFont(new Font("Arial", 55)); // Postavlja font i velicinu
 
         Button dugme = new Button("Prijavi se"); // Kreira dugme koje vodi na stranicu za prijavu
-        dugme.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; "); // Stil dugmeta
+        dugme.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; "); // Stil dugmeta
         dugme.setOnAction(e -> stage.setScene(getscene2(stage))); // Postavlja prelaz na prozor za prijavu klikom na dugme
         VBox vbox = new VBox(35, label, dugme); // Kreira VBox i prosledjuje razmak izmedju elemenata i elemente
         vbox.setAlignment(Pos.CENTER); // Pozicionira vBox na centar
@@ -33,10 +33,10 @@ public class MojGUI {
         lozinka.setPromptText("Unesite lozinku");
 
         Button dugme2 = new Button("Nazad");
-        dugme2.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugme2.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         Button dugmePrijava = new Button("Potvrdi");
-        dugmePrijava.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugmePrijava.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
 
         ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreira instancu klase ProveraLozinke, da bi pozvali metodu iste klase dalje u nastavku
@@ -75,19 +75,23 @@ public class MojGUI {
 
     public Scene getscene3(Stage stage){
         // Treci prozor sa opcijama za Novi unos i Evidenciju kao i za zatvaranje aplikacije
+        Button zaServisera = new Button("Servisi");
+        zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+
+
         Button unosServis = new Button("Novi unos");
-        unosServis.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        unosServis.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         Button evidencija = new Button("Evidencija");
-        evidencija.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        evidencija.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         Button zatvori = new Button("Izlaz");
-        zatvori.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         unosServis.setOnAction(e -> stage.setScene(getscenaZaUnos(stage)));
         zatvori.setOnAction(e -> Platform.exit()); // Zatvara aplikaciju metoda exit()
 
-        VBox treciProzor = new VBox(35,unosServis,evidencija, zatvori);
+        VBox treciProzor = new VBox(35,zaServisera,unosServis,evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);
         return new Scene(treciProzor, 700,400);
 
@@ -95,15 +99,161 @@ public class MojGUI {
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos
 
-        Label markaL = new Label("Unesite marku");
-        TextField marka = new TextField();
-        marka.setPromptText("Unesite marku automobila");
+        // Label za marku automobila
+        Label markaL = new Label("Izaberite klasu");
+        markaL.setFont(Font.font(18));
 
-        Label modelL = new Label("Unesite model");
-        TextField model = new TextField();
-        model.setPromptText("Unesite model automobila");
+// ComboBox za marku automobila
+        ComboBox<String> marka = new ComboBox<>();
+        marka.getItems().addAll("A", "B", "C", "E", "S", "G","CLA","CLS","GLA","GLB","GLC", "GLE", "GLS");
+        marka.setPromptText("Izaberite klasu automobila");
+
+// Label za model automobila
+        Label modelL = new Label("Izaberite model");
+        modelL.setFont(Font.font(18));
+
+// ComboBox za model automobila
+        ComboBox<String> model = new ComboBox<>();
+        model.setPromptText("Izaberite model automobila");
+
+// Dodavanje primera modela u zavisnosti od marke
+        marka.setOnAction(e -> {
+            model.getItems().clear(); // Očisti prethodne opcije
+            String selectedBrand = marka.getValue();
+            if ("A".equals(selectedBrand)) {
+                model.getItems().addAll("A 140");
+                model.getItems().addAll("A 150");
+                model.getItems().addAll("A 160");
+                model.getItems().addAll("A 170");
+                model.getItems().addAll("A 180");
+                model.getItems().addAll("A 190");
+                model.getItems().addAll("A 200");
+                model.getItems().addAll("A 210");
+                model.getItems().addAll("A 220");
+                model.getItems().addAll("A 250");
+                model.getItems().addAll("A 35 AMG");
+                model.getItems().addAll("A 45 AMG");
+            } else if ("B".equals(selectedBrand)) {
+                model.getItems().addAll("B 150");
+                model.getItems().addAll("B 160");
+                model.getItems().addAll("B 170");
+                model.getItems().addAll("B 180");
+                model.getItems().addAll("B 200");
+                model.getItems().addAll("B 220");
+                model.getItems().addAll("B 250");
+            } else if ("C".equals(selectedBrand)) {
+                model.getItems().addAll("C 180");
+                model.getItems().addAll("C 200");
+                model.getItems().addAll("C 220");
+                model.getItems().addAll("C 230");
+                model.getItems().addAll("C 240");
+                model.getItems().addAll("C 250");
+                model.getItems().addAll("C 270");
+                model.getItems().addAll("C 280");
+                model.getItems().addAll("C 30 AMG");
+                model.getItems().addAll("C 300");
+                model.getItems().addAll("C 320");
+                model.getItems().addAll("C 32 AMG");
+                model.getItems().addAll("C 43 AMG");
+                model.getItems().addAll("C 63 AMG");
+            } else if ("E".equals(selectedBrand)) {
+                model.getItems().addAll("E 200");
+                model.getItems().addAll("E 220");
+                model.getItems().addAll("E 230");
+                model.getItems().addAll("E 240");
+                model.getItems().addAll("E 250");
+                model.getItems().addAll("E 260");
+                model.getItems().addAll("E 270");
+                model.getItems().addAll("E 280");
+                model.getItems().addAll("E 290");
+                model.getItems().addAll("E 300");
+                model.getItems().addAll("E 320");
+                model.getItems().addAll("E 350");
+                model.getItems().addAll("E 400");
+                model.getItems().addAll("E 43 AMG");
+                model.getItems().addAll("E 450");
+                model.getItems().addAll("E 500");
+                model.getItems().addAll("E 53 AMG");
+                model.getItems().addAll("E 63 AMG");
+            } else if ("S".equals(selectedBrand)) {
+                model.getItems().addAll("S 250");
+                model.getItems().addAll("S 280");
+                model.getItems().addAll("S 300");
+                model.getItems().addAll("S 320");
+                model.getItems().addAll("S 350");
+                model.getItems().addAll("S 400");
+                model.getItems().addAll("S 420");
+                model.getItems().addAll("S 450");
+                model.getItems().addAll("S 500");
+                model.getItems().addAll("S 550");
+                model.getItems().addAll("S 580");
+                model.getItems().addAll("S 63 AMG");
+            } else if ("G".equals(selectedBrand)) {
+                model.getItems().addAll("G 290");
+                model.getItems().addAll("G 300");
+                model.getItems().addAll("G 320");
+                model.getItems().addAll("G 350");
+                model.getItems().addAll("G 400");
+                model.getItems().addAll("G 450");
+                model.getItems().addAll("G 500");
+                model.getItems().addAll("G 63 AMG");
+            } else if ("CLA".equals(selectedBrand)) {
+                model.getItems().addAll("CLA 180");
+                model.getItems().addAll("CLA 200");
+                model.getItems().addAll("CLA 220");
+                model.getItems().addAll("CLA 250");
+                model.getItems().addAll("CLA 35 AMG");
+                model.getItems().addAll("CLA 45 AMG");
+
+            } else if ("CLS".equals(selectedBrand)) {
+                model.getItems().addAll("CLS 220");
+                model.getItems().addAll("CLS 250");
+                model.getItems().addAll("CLS 300");
+                model.getItems().addAll("CLS 320");
+                model.getItems().addAll("CLS 350");
+                model.getItems().addAll("CLS 400");
+                model.getItems().addAll("CLS 450");
+                model.getItems().addAll("CLS 500");
+                model.getItems().addAll("CLS 53 AMG");
+                model.getItems().addAll("CLS 63 AMG");
+            } else if ("GLA".equals(selectedBrand)) {
+                model.getItems().addAll("GLA 35 AMG");
+                model.getItems().addAll("GLA 45 AMG");
+                model.getItems().addAll("GLA 180");
+                model.getItems().addAll("GLA 200");
+                model.getItems().addAll("GLA 220");
+                model.getItems().addAll("GLA 250");
+            } else if ("GLB".equals(selectedBrand)) {
+                model.getItems().addAll("GLB 180");
+                model.getItems().addAll("GLB 200");
+                model.getItems().addAll("GLB 220");
+            } else if ("GLC".equals(selectedBrand)) {
+                model.getItems().addAll("GLC 43 AMG");
+                model.getItems().addAll("GLC 200");
+                model.getItems().addAll("GLC 220");
+                model.getItems().addAll("GLC 250");
+                model.getItems().addAll("GLC 300");
+                model.getItems().addAll("GLC 350");
+            } else if ("GLE".equals(selectedBrand)) {
+                model.getItems().addAll("GLE 43 AMG");
+                model.getItems().addAll("GLE 53 AMG");
+                model.getItems().addAll("GLE 63 AMG");
+                model.getItems().addAll("GLE 250");
+                model.getItems().addAll("GLE 300");
+                model.getItems().addAll("GLE 350");
+                model.getItems().addAll("GLE 400");
+                model.getItems().addAll("GLE 450");
+            } else if ("GLS".equals(selectedBrand)) {
+                model.getItems().addAll("GLS 63 AMG");
+                model.getItems().addAll("GLS 400");
+                model.getItems().addAll("GLS 450");
+                model.getItems().addAll("GLS 580");
+
+        }
+        });
 
         Label godisteL = new Label("Unesite godiste");
+        godisteL.setFont(Font.font(18));
         TextField godiste = new TextField();
         godiste.setPromptText("Unesite godiste");
 
@@ -114,29 +264,38 @@ public class MojGUI {
         });
 
         Label registracijaL = new Label("Unesite registarske oznake");
+        registracijaL.setFont(Font.font(18));
         TextField registracija = new TextField();;
         registracija.setPromptText("Unesite registarske oznake");
 
         Label opisL = new Label("Unesite opis");
+        opisL.setFont(Font.font(18));
         TextArea opis = new TextArea();
         opis.setPromptText("Unesite opis servisa");
 
+        Label emailL = new Label("Unesite email");
+        emailL.setFont(Font.font(18));
+        TextArea email = new TextArea();
+        email.setPromptText("Unesite email");
+
+
 
         Label datumL = new Label("Izaberite datum");
+        datumL.setFont(Font.font(18));
         DatePicker datum = new DatePicker();
         datum.setPromptText("Izaberite datum");
 
         Button nazad = new Button("Nazad");
-        nazad.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        nazad.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         Button unos = new Button("Potrvdi");
-        unos.setStyle("-fx-font: 28 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         nazad.setOnAction(e -> stage.setScene(getscene3(stage)));
 
-        VBox noviUnos = new VBox(20,  markaL,marka, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis, unos, nazad);
+        VBox noviUnos = new VBox(10,  markaL,marka, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
-        return new Scene(noviUnos, 900, 700);
+        return new Scene(noviUnos, 1100, 900);
 
     }
 }

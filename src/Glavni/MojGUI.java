@@ -292,10 +292,10 @@ public class MojGUI {
         unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         nazad.setOnAction(e -> stage.setScene(getscene3(stage)));
-        UnosUBazu u = new UnosUBazu();
+        UnosUBazu u = new UnosUBazu(); // Kreira objekat klase za unos u bazu
 
         unos.setOnAction(e -> {
-            try {
+            try { // Dohvata vrednosti iz polja
                 String izabranaKlasa = klasa.getValue();
                 String izabraniModel = model.getValue();
                 String unesenoGodiste = godiste.getText();
@@ -309,6 +309,7 @@ public class MojGUI {
                     return;
                 }
 
+                // Vrednosti se prosledjuju objektu preko konstruktora
                 Vozilo novoVozilo = new Vozilo(
                         izabranaKlasa,
                         izabraniModel,
@@ -319,7 +320,7 @@ public class MojGUI {
                         izabranDatum
                 );
 
-                boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo);
+                boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo); // Objekat Vozilo se prosledjuje metodi za unos
 
                 if (unosUspesan) {
                     prikaziPoruku("Uspešno", "Vozilo je uspešno uneto u bazu.");

@@ -104,9 +104,9 @@ public class MojGUI {
         markaL.setFont(Font.font(18));
 
 // ComboBox za marku automobila
-        ComboBox<String> marka = new ComboBox<>();
-        marka.getItems().addAll("A", "B", "C", "E", "S", "G","CLA","CLS","GLA","GLB","GLC", "GLE", "GLS");
-        marka.setPromptText("Izaberite klasu automobila");
+        ComboBox<String> klasa = new ComboBox<>();
+        klasa.getItems().addAll("A", "B", "C", "E", "S", "G","CLA","CLS","GLA","GLB","GLC", "GLE", "GLS");
+        klasa.setPromptText("Izaberite klasu automobila");
 
 // Label za model automobila
         Label modelL = new Label("Izaberite model");
@@ -117,9 +117,9 @@ public class MojGUI {
         model.setPromptText("Izaberite model automobila");
 
 // Dodavanje primera modela u zavisnosti od marke
-        marka.setOnAction(e -> {
+        klasa.setOnAction(e -> {
             model.getItems().clear(); // Očisti prethodne opcije
-            String selectedBrand = marka.getValue();
+            String selectedBrand = klasa.getValue();
             if ("A".equals(selectedBrand)) {
                 model.getItems().addAll("A 140");
                 model.getItems().addAll("A 150");
@@ -292,34 +292,48 @@ public class MojGUI {
         unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         nazad.setOnAction(e -> stage.setScene(getscene3(stage)));
-        unos.setOnAction(e ->{
+        UnosUBazu u = new UnosUBazu();
+
+        unos.setOnAction(e -> {
             try {
-                String izabranaKlasa = marka.getValue();
+                String izabranaKlasa = klasa.getValue();
                 String izabraniModel = model.getValue();
-                int unesenoGodiste = Integer.parseInt(godiste.getText());
+                String unesenoGodiste = godiste.getText();
                 String unesenaRegistracija = registracija.getText();
-                String uneseniEmail = email.getText();
                 String uneseniOpis = opis.getText();
-                String izabranDatum = datum.getValue().toString(); // Pretvara LocalDate u String
+                String uneseniEmail = email.getText();
+                String izabranDatum = datum.getValue().toString();
 
-                // Proveri da li su svi obavezni podaci uneti
-                if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty() || uneseniEmail.isEmpty() || izabranDatum == null) {
-                    prikaziPoruku("Greška", "Molimo popunite sva polja.");
+                if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty()) {
+                    prikaziPoruku("Greška", "Molimo popunite obavezna polja.");
                     return;
+                }
 
-        };
-                UnosUBazu vozilaDAO = new UnosUBazu();
-                UnosUBazu.dodajVozilo(izabranaKlasa, izabraniModel, unesenoGodiste, unesenaRegistracija, uneseniEmail, uneseniOpis, izabranDatum);
+                Vozilo novoVozilo = new Vozilo(
+                        izabranaKlasa,
+                        izabraniModel,
+                        unesenoGodiste,
+                        unesenaRegistracija,
+                        uneseniOpis,
+                        uneseniEmail,
+                        izabranDatum
+                );
 
-                prikaziPoruku("Uspeh", "Podaci su uspešno dodati u bazu.");
-                stage.setScene(getscene3(stage)); // Povratak na prethodnu scenu
+                boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo);
 
-            } catch (NumberFormatException ex) {
-                prikaziPoruku("Greška", "Godiste mora biti broj.");
+                if (unosUspesan) {
+                    prikaziPoruku("Uspešno", "Vozilo je uspešno uneto u bazu.");
+                } else {
+                    prikaziPoruku("Greška", "Došlo je do greške pri unosu podataka.");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                prikaziPoruku("Greška", "Došlo je do greške: " + ex.getMessage());
             }
         });
 
-        VBox noviUnos = new VBox(10,  markaL,marka, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis,emailL,email, unos, nazad);
+
+        VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
         return new Scene(noviUnos, 1100, 900);
 

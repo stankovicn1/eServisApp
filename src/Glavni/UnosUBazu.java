@@ -6,26 +6,26 @@ import java.sql.SQLException;
 
 public class UnosUBazu {
 
-    // Metoda za unos podataka u tabelu Vozila
-    public static void dodajVozilo(String klasa, String model, int godiste, String registracija, String email, String opis, String datum) {
-        String sql = "INSERT INTO Vozila (klasa, model, godiste, registracija, email, opis, datum) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    // Unos podataka u bazu
+    public static boolean unosVozila(Vozilo vozilo) {
+        String sql = "INSERT INTO vozila (klasa, model, godiste, registracija, opis, email, datum) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DbKonekcija.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection konekcija = DbKonekcija.getConnection();
+             PreparedStatement stmt = konekcija.prepareStatement(sql)) {
 
-            pstmt.setString(1, klasa);
-            pstmt.setString(2, model);
-            pstmt.setInt(3, godiste);
-            pstmt.setString(4, registracija);
-            pstmt.setString(5, email);
-            pstmt.setString(6, opis);
-            pstmt.setString(7, datum);
+            stmt.setString(1, vozilo.getKlasa());
+            stmt.setString(2, vozilo.getModel());
+            stmt.setString(3, vozilo.getGodiste());
+            stmt.setString(4, vozilo.getRegistracija());
+            stmt.setString(5, vozilo.getOpis());
+            stmt.setString(6, vozilo.getEmail());
+            stmt.setString(7, vozilo.getDatum());
 
-            pstmt.executeUpdate();
-            System.out.println("Podaci su uspešno uneseni u bazu.");
-
+            int rezultat = stmt.executeUpdate();
+            return rezultat > 0; // Vraća true ako je unos uspešan
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Vraća false u slučaju greške
         }
     }
 }

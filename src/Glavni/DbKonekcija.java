@@ -12,7 +12,7 @@ public class DbKonekcija {
     public static Connection getConnection() { // Metoda koja omogucava pristup konekciji sa bazom
         try {
             if (connection == null || connection.isClosed()) { // Proverava da li konekcija jos nije kreirana ili je zatvorena
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eServis", "root", ""); // Ako je konekcija null ili zatvorena kreira novu konekciju sa bazom
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/EServisnaknjigaMercedes", "root", ""); // Ako je konekcija null ili zatvorena kreira novu konekciju sa bazom
             }
         } catch (SQLException e) {
             System.err.println("Greska prilikom koneckcije na bazu " + e.getMessage()); // Ako je konekcija neuspesna prikazuje poruku

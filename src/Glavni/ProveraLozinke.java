@@ -10,7 +10,7 @@ public class ProveraLozinke {
     public boolean checkPassword(String password) {
         try (Connection connection = DbKonekcija.getConnection(); // Kreiranje konekcije
              PreparedStatement pstmt = connection.prepareStatement( // Priprema SQL upita
-                     "SELECT 1 FROM korisnici WHERE ime = ? AND lozinka = ?")) {
+                     "SELECT 1 FROM admintab WHERE ime = ? AND lozinka = ?")) {
 
             pstmt.setString(1, "admin");
             pstmt.setString(2, password);

@@ -292,6 +292,32 @@ public class MojGUI {
         unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         nazad.setOnAction(e -> stage.setScene(getscene3(stage)));
+        unos.setOnAction(e ->{
+            try {
+                String izabranaKlasa = marka.getValue();
+                String izabraniModel = model.getValue();
+                int unesenoGodiste = Integer.parseInt(godiste.getText());
+                String unesenaRegistracija = registracija.getText();
+                String uneseniEmail = email.getText();
+                String uneseniOpis = opis.getText();
+                String izabranDatum = datum.getValue().toString(); // Pretvara LocalDate u String
+
+                // Proveri da li su svi obavezni podaci uneti
+                if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty() || uneseniEmail.isEmpty() || izabranDatum == null) {
+                    prikaziPoruku("Greška", "Molimo popunite sva polja.");
+                    return;
+
+        };
+                UnosUBazu vozilaDAO = new UnosUBazu();
+                UnosUBazu.dodajVozilo(izabranaKlasa, izabraniModel, unesenoGodiste, unesenaRegistracija, uneseniEmail, uneseniOpis, izabranDatum);
+
+                prikaziPoruku("Uspeh", "Podaci su uspešno dodati u bazu.");
+                stage.setScene(getscene3(stage)); // Povratak na prethodnu scenu
+
+            } catch (NumberFormatException ex) {
+                prikaziPoruku("Greška", "Godiste mora biti broj.");
+            }
+        });
 
         VBox noviUnos = new VBox(10,  markaL,marka, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);

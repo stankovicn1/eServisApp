@@ -1,6 +1,7 @@
 package Glavni;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -103,14 +104,15 @@ public class MojGUI {
         // Dobavljanje podataka iz baze
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT model, datum, opis FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT model, datum, opis, registracija FROM vozila")) {
 
             while (rs.next()) {
                 String model = rs.getString("model");
                 String datum = rs.getString("datum");
                 String opis = rs.getString("opis");
+                String registracija = rs.getString("registracija");
 
-                Vozilo vozilo = new Vozilo("", model, "", "", opis, "", datum);
+                Vozilo vozilo = new Vozilo("", model, "", registracija, opis, "", datum);
                 podaciIzBaze.add(vozilo);
             }
 
@@ -128,8 +130,64 @@ public class MojGUI {
         TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
         opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
 
+        TableColumn<Vozilo, String> registracijaColumn = new TableColumn<>("Registracija");
+        registracijaColumn.setCellValueFactory(new PropertyValueFactory<>("registracija"));
+
+        // Dodavanje kolona za checkbox
+        TableColumn<Vozilo, Boolean> poceoCheckboxColumn = new TableColumn<>("Poceo da radi");
+        poceoCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
+        poceoCheckboxColumn.setCellFactory(col -> {
+            TableCell<Vozilo, Boolean> cell = new TableCell<>() {
+                private final CheckBox checkBox = new CheckBox();
+
+                {
+                    checkBox.setOnAction(e -> {
+                        Vozilo vozilo = getTableView().getItems().get(getIndex());
+                        System.out.println("Poceo da radi: " + vozilo.getModel());
+                    });
+                }
+
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(checkBox);
+                    }
+                }
+            };
+            return cell;
+        });
+
+        TableColumn<Vozilo, Boolean> zavrsenCheckboxColumn = new TableColumn<>("Zavrsen rad");
+        zavrsenCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
+        zavrsenCheckboxColumn.setCellFactory(col -> {
+            TableCell<Vozilo, Boolean> cell = new TableCell<>() {
+                private final CheckBox checkBox = new CheckBox();
+
+                {
+                    checkBox.setOnAction(e -> {
+                        Vozilo vozilo = getTableView().getItems().get(getIndex());
+                        System.out.println("Zavrsen rad: " + vozilo.getModel());
+                    });
+                }
+
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(checkBox);
+                    }
+                }
+            };
+            return cell;
+        });
+
         // Dodavanje kolona u tabelu
-        tabelaServisa.getColumns().addAll(modelColumn, datumColumn, opisColumn);
+        tabelaServisa.getColumns().addAll(modelColumn, datumColumn, opisColumn, registracijaColumn, poceoCheckboxColumn, zavrsenCheckboxColumn);
 
         // Postavljanje podataka u tabelu
         tabelaServisa.setItems(podaciIzBaze);
@@ -142,11 +200,14 @@ public class MojGUI {
         layout.setPadding(new Insets(20));
         layout.getChildren().add(tabelaServisa);
 
-        Scene scene = new Scene(layout, 600, 400);
+        Scene scene = new Scene(layout, 800, 400);
         stageServisera.setScene(scene);
         stageServisera.show();
     }
+
     private TableView<Vozilo> tabelaServisa; // Deklaracija tabele
+
+
 
 
     public Scene getscenaZaUnos(Stage stage){
@@ -483,7 +544,4 @@ public class MojGUI {
 
         return new Scene(evidencijaLayout, 800, 500);
     }
-
-
-
 }

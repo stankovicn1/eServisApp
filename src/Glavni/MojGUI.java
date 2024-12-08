@@ -1,101 +1,154 @@
 package Glavni;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+
+import java.sql.*;
 
 public class MojGUI {
+    public MojGUI() throws SQLException {
+    }
+
     public Scene getscene(Stage stage){
-        // Prvi prozor , pocetni prozor sa naslovom i dugmetom koje vodi na prozor za prijavu
+        Label label = new Label("eServisnaKnjizica");
+        label.setFont(new Font("Arial", 55));
 
-        Label label = new Label("eServisnaKnjizica"); // Kreira labelu
-        label.setFont(new Font("Arial", 55)); // Postavlja font i velicinu
-
-        Button dugme = new Button("Prijavi se"); // Kreira dugme koje vodi na stranicu za prijavu
-        dugme.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; "); // Stil dugmeta
-        dugme.setOnAction(e -> stage.setScene(getscene2(stage))); // Postavlja prelaz na prozor za prijavu klikom na dugme
-        VBox vbox = new VBox(35, label, dugme); // Kreira VBox i prosledjuje razmak izmedju elemenata i elemente
-        vbox.setAlignment(Pos.CENTER); // Pozicionira vBox na centar
-        return new Scene(vbox, 700, 400); // vraca Scenu
-
+        Button dugme = new Button("Prijavi se");
+        dugme.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+        dugme.setOnAction(e -> stage.setScene(getscene2(stage)));
+        VBox vbox = new VBox(35, label, dugme);
+        vbox.setAlignment(Pos.CENTER);
+        return new Scene(vbox, 700, 400);
     }
 
     public Scene getscene2(Stage stage){
-        // Drugi prozor za prijavu
         Label labeldvojka = new Label("Unesi lozinku");
         labeldvojka.setFont(new Font("Arial", 35));
 
-        PasswordField lozinka = new PasswordField(); // Polje za unos lozinke
+        PasswordField lozinka = new PasswordField();
         lozinka.setPromptText("Unesite lozinku");
 
         Button dugme2 = new Button("Nazad");
-        dugme2.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugme2.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button dugmePrijava = new Button("Potvrdi");
-        dugmePrijava.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        dugmePrijava.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
+        ProveraLozinke proveraLozinke = new ProveraLozinke();
 
-        ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreira instancu klase ProveraLozinke, da bi pozvali metodu iste klase dalje u nastavku
+        dugmePrijava.setOnAction(e -> {
+            String unesenaLozinka = lozinka.getText();
 
-
-        dugmePrijava.setOnAction(e -> { // Postavljamo akciju za dugme za prijavu koje treba da proveri da li je uneta lozinka ista kao i lozinka iz tabele korisnici u bazi
-            String unesenaLozinka = lozinka.getText(); // Uzima unesenu lozinku iz polja
-
-
-            if (proveraLozinke.checkPassword(unesenaLozinka)) { // Pozivanje metode za proveru lozinke
-
-                stage.setScene(getscene3(stage)); // Ako je lozinka tacna, prelazak na sledecu scenu
+            if (proveraLozinke.checkPassword(unesenaLozinka)) {
+                stage.setScene(getscene3(stage));
             } else {
-
-                prikaziPoruku("Greška", "Pogrešna lozinka."); // Ako je lozinka pogresna, prikazuje poruku o gresci
+                prikaziPoruku("Greška", "Pogrešna lozinka.");
             }
         });
 
-
-        dugme2.setOnAction(e -> stage.setScene(getscene(stage))); // Dugme nazad koje prelazi na prvi prozor
-
+        dugme2.setOnAction(e -> stage.setScene(getscene(stage)));
 
         VBox vBoxdvojka = new VBox(35, labeldvojka, lozinka, dugmePrijava, dugme2);
         vBoxdvojka.setAlignment(Pos.CENTER);
         return new Scene(vBoxdvojka, 700, 400);
-
     }
 
-    private void prikaziPoruku(String naslov, String poruka) { // Metoda za prikaz poruke tipa Alert
+    private void prikaziPoruku(String naslov, String poruka) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(naslov);
         alert.setContentText(poruka);
         alert.showAndWait();
     }
 
-
     public Scene getscene3(Stage stage){
-        // Treci prozor sa opcijama za Novi unos i Evidenciju kao i za zatvaranje aplikacije
         Button zaServisera = new Button("Servisi");
-        zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
-
+        zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button unosServis = new Button("Novi unos");
-        unosServis.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        unosServis.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button evidencija = new Button("Evidencija");
-        evidencija.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        evidencija.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button zatvori = new Button("Izlaz");
-        zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+        zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
+       // evidencija.setOnAction(e -> otvoriProzorServisi());
+        zaServisera.setOnAction(e -> otvoriProzorServisi());
         unosServis.setOnAction(e -> stage.setScene(getscenaZaUnos(stage)));
-        zatvori.setOnAction(e -> Platform.exit()); // Zatvara aplikaciju metoda exit()
+        zatvori.setOnAction(e -> Platform.exit());
 
-        VBox treciProzor = new VBox(35,zaServisera,unosServis,evidencija, zatvori);
+        VBox treciProzor = new VBox(35, zaServisera, unosServis, evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);
-        return new Scene(treciProzor, 700,400);
-
+        return new Scene(treciProzor, 700, 400);
     }
+    private void otvoriProzorServisi() {
+        // Inicijalizacija tabele
+        tabelaServisa = new TableView<>(); // Kreiramo instancu TableView pre bilo kakvog korišćenja
+
+        ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
+
+        // Dobavljanje podataka iz baze
+        try (Connection conn = DbKonekcija.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT model, datum, opis FROM vozila")) {
+
+            while (rs.next()) {
+                String model = rs.getString("model");
+                String datum = rs.getString("datum");
+                String opis = rs.getString("opis");
+
+                Vozilo vozilo = new Vozilo("", model, "", "", opis, "", datum);
+                podaciIzBaze.add(vozilo);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Kreiranje kolona za tabelu
+        TableColumn<Vozilo, String> modelColumn = new TableColumn<>("Model");
+        modelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
+
+        TableColumn<Vozilo, String> datumColumn = new TableColumn<>("Datum");
+        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
+
+        TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
+        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
+
+        // Dodavanje kolona u tabelu
+        tabelaServisa.getColumns().addAll(modelColumn, datumColumn, opisColumn);
+
+        // Postavljanje podataka u tabelu
+        tabelaServisa.setItems(podaciIzBaze);
+
+        // Priprema prozora
+        Stage stageServisera = new Stage();
+        stageServisera.setTitle("Podaci o Servisima");
+
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20));
+        layout.getChildren().add(tabelaServisa);
+
+        Scene scene = new Scene(layout, 600, 400);
+        stageServisera.setScene(scene);
+        stageServisera.show();
+    }
+    private TableView<Vozilo> tabelaServisa; // Deklaracija tabele
+
+
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos
 
@@ -249,7 +302,7 @@ public class MojGUI {
                 model.getItems().addAll("GLS 450");
                 model.getItems().addAll("GLS 580");
 
-        }
+            }
         });
 
         Label godisteL = new Label("Unesite godiste");

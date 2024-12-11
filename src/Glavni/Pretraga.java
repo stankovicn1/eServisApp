@@ -17,9 +17,7 @@ public class Pretraga {
                 String filter = newValue.toLowerCase();
                 return vozilo.getKlasa().toLowerCase().contains(filter) ||
                         vozilo.getModel().toLowerCase().contains(filter) ||
-                        vozilo.getDatum().toLowerCase().contains(filter) ||
                         vozilo.getGodiste().toLowerCase().contains(filter) ||
-                        vozilo.getOpis().toLowerCase().contains(filter) ||
                         vozilo.getEmail().toLowerCase().contains(filter) ||
                         vozilo.getRegistracija().toLowerCase().contains(filter);
             });

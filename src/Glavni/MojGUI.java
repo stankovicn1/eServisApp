@@ -24,7 +24,7 @@ public class MojGUI {
     public MojGUI() throws SQLException {
     }
 
-    public Scene getscene(Stage stage){
+    public Scene getscene(Stage stage){ // Pocetni prozor
         Label label = new Label("eServisnaKnjizica");
         label.setFont(new Font("Arial", 55));
 
@@ -36,7 +36,7 @@ public class MojGUI {
         return new Scene(vbox, 700, 400);
     }
 
-    public Scene getscene2(Stage stage){
+    public Scene getscene2(Stage stage){ // Prozor za unos lozinke
         Label labeldvojka = new Label("Unesi lozinku");
         labeldvojka.setFont(new Font("Arial", 35));
         labeldvojka.setPadding(new Insets(20));
@@ -76,7 +76,7 @@ public class MojGUI {
         alert.showAndWait();
     }
 
-    public Scene getscene3(Stage stage){
+    public Scene getscene3(Stage stage){  // Prozor za izbor jedne od opcija
         Button zaServisera = new Button("Servisi");
         zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
@@ -109,16 +109,16 @@ public class MojGUI {
         // Dobavljanje podataka iz baze
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, model, datum, opis, registracija FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila")) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String model = rs.getString("model");
-                String datum = rs.getString("datum");
-                String opis = rs.getString("opis");
+                //String datum = rs.getString("datum");
+                //String opis = rs.getString("opis");
                 String registracija = rs.getString("registracija");
 
-                Vozilo vozilo = new Vozilo(id,"", model,"",registracija,opis,"",datum);
+                Vozilo vozilo = new Vozilo(id,"", model,"",registracija,"");
                 podaciIzBaze.add(vozilo);
             }
 
@@ -130,26 +130,26 @@ public class MojGUI {
         TableColumn<Vozilo, String> modelColumn = new TableColumn<>("Model");
         modelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
 
-        TableColumn<Vozilo, String> datumColumn = new TableColumn<>("Datum");
-        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
+       /* TableColumn<Vozilo, String> datumColumn = new TableColumn<>("Datum");
+        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));*/
 
-        TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
-        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
+       /* TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
+        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));*/
 
         TableColumn<Vozilo, String> registracijaColumn = new TableColumn<>("Registracija");
         registracijaColumn.setCellValueFactory(new PropertyValueFactory<>("registracija"));
 
-        // Dodavanje kolona za checkbox
+       /* // Dodavanje kolona za checkbox
         TableColumn<Vozilo, Boolean> poceoCheckboxColumn = new TableColumn<>("Poceo da radi");
         poceoCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
         poceoCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());
 
         TableColumn<Vozilo, Boolean> zavrsenCheckboxColumn = new TableColumn<>("Zavrsen rad");
         zavrsenCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
-        zavrsenCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());
+        zavrsenCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());*/
 
         // Dodavanje kolona u tabelu
-        tabelaServisa.getColumns().addAll(modelColumn, datumColumn, opisColumn, registracijaColumn, poceoCheckboxColumn, zavrsenCheckboxColumn);
+        tabelaServisa.getColumns().addAll(modelColumn, registracijaColumn);
         tabelaServisa.setItems(podaciIzBaze);
 
         // Kreiranje prozora
@@ -165,7 +165,7 @@ public class MojGUI {
         stageServisera.show();
     }
 
-    private class CheckBoxTableCell extends TableCell<Vozilo, Boolean> {
+   /* private class CheckBoxTableCell extends TableCell<Vozilo, Boolean> {
         private final CheckBox checkBox = new CheckBox();
 
         public CheckBoxTableCell() {
@@ -175,9 +175,9 @@ public class MojGUI {
                 boolean status = checkBox.isSelected();
                 azurirajStatus();
             });
-        }
+        }*/
 
-        @Override
+     /*   @Override
         protected void updateItem(Boolean item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
@@ -186,9 +186,9 @@ public class MojGUI {
                 setGraphic(checkBox);
             }
         }
-    }
+    }*/
 
-    public void azurirajStatus() {
+   /* public void azurirajStatus() {
         try {
             Connection connection = DbKonekcija.getConnection();
             String query = "UPDATE statusservisa SET status = ? WHERE vozilo_id = ?";
@@ -205,7 +205,7 @@ public class MojGUI {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos
@@ -379,22 +379,22 @@ public class MojGUI {
         TextField registracija = new TextField();;
         registracija.setPromptText("Unesite registarske oznake");
 
-        Label opisL = new Label("Unesite opis");
+      /*  Label opisL = new Label("Unesite opis");
         opisL.setFont(Font.font(18));
         TextArea opis = new TextArea();
         opis.setPromptText("Unesite opis servisa");
-
+*/
         Label emailL = new Label("Unesite email");
         emailL.setFont(Font.font(18));
         TextArea email = new TextArea();
         email.setPromptText("Unesite email");
 
 
-
+/*
         Label datumL = new Label("Izaberite datum");
         datumL.setFont(Font.font(18));
         DatePicker datum = new DatePicker();
-        datum.setPromptText("Izaberite datum");
+        datum.setPromptText("Izaberite datum");*/
 
         Button nazad = new Button("Nazad");
         nazad.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
@@ -411,9 +411,9 @@ public class MojGUI {
                 String izabraniModel = model.getValue();
                 String unesenoGodiste = godiste.getText();
                 String unesenaRegistracija = registracija.getText();
-                String uneseniOpis = opis.getText();
+                //String uneseniOpis = opis.getText();
                 String uneseniEmail = email.getText();
-                String izabranDatum = datum.getValue().toString();
+                //String izabranDatum = datum.getValue().toString();
 
                 if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty()) {
                     prikaziPoruku("Greška", "Molimo popunite obavezna polja.");
@@ -428,9 +428,9 @@ public class MojGUI {
                         izabraniModel,
                         unesenoGodiste,
                         unesenaRegistracija,
-                        uneseniOpis,
-                        uneseniEmail,
-                        izabranDatum
+                        //uneseniOpis,
+                        uneseniEmail
+                        //izabranDatum
                 );
 
 
@@ -448,7 +448,7 @@ public class MojGUI {
         });
 
 
-        VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, datumL,datum, opisL, opis,emailL,email, unos, nazad);
+        VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
         return new Scene(noviUnos, 1100, 900);
 
@@ -470,14 +470,14 @@ public class MojGUI {
         TableColumn<Vozilo, String> modelColumn = new TableColumn<>("Model");
         modelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
 
-        TableColumn<Vozilo, String> datumColumn = new TableColumn<>("Datum");
-        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
+       /* TableColumn<Vozilo, String> datumColumn = new TableColumn<>("Datum");
+        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));*/
 
         TableColumn<Vozilo, String> godisteColumn = new TableColumn<>("Godište");
         godisteColumn.setCellValueFactory(new PropertyValueFactory<>("godiste"));
 
-        TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
-        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
+       /* TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
+        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));*/
 
         TableColumn<Vozilo, String> emailColumn = new TableColumn<>("Email");
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -485,27 +485,27 @@ public class MojGUI {
         TableColumn<Vozilo, String> registracijaColumn = new TableColumn<>("Registracija");
         registracijaColumn.setCellValueFactory(new PropertyValueFactory<>("registracija"));
 
-        tabelaEvidencija.getColumns().addAll(klasaColumn, modelColumn, datumColumn, godisteColumn, opisColumn, emailColumn, registracijaColumn);
+        tabelaEvidencija.getColumns().addAll(klasaColumn, modelColumn, /*datumColumn,*/ godisteColumn, /*opisColumn, */emailColumn, registracijaColumn);
 
         // Učitavanje podataka iz baze
         ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
 
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, klasa, model, datum, godiste, opis, email, registracija FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, klasa, model, godiste, email, registracija FROM vozila")) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String klasa = rs.getString("klasa");
                 String model = rs.getString("model");
-                String datum = rs.getString("datum");
+               // String datum = rs.getString("datum");
                 String godiste = rs.getString("godiste");
-                String opis = rs.getString("opis");
+                //String opis = rs.getString("opis");
                 String email = rs.getString("email");
                 String registracija = rs.getString("registracija");
 
                 // Kreiranje objekta Vozilo sa id-jem
-                Vozilo vozilo = new Vozilo(id, klasa, model, godiste, registracija, opis, email, datum);
+                Vozilo vozilo = new Vozilo(id, klasa, model, godiste, registracija, email);
                 podaciIzBaze.add(vozilo);
             }
         } catch (SQLException e) {

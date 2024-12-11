@@ -8,20 +8,19 @@ public class Vozilo {
     private String model;
     private String godiste;
     private String registracija;
-    private String opis;
+
     private String email;
-    private String datum;
+
 
     // Konstruktor za inicijalizaciju sa ID-jem
-    public Vozilo(int id, String klasa, String model, String godiste, String registracija, String opis, String email, String datum) {
+    public Vozilo(int id, String klasa, String model, String godiste, String registracija, String email) {
         this.id = id;
         this.klasa = klasa;
         this.model = model;
         this.godiste = godiste;
         this.registracija = registracija;
-        this.opis = opis;
         this.email = email;
-        this.datum = datum;
+
     }
 
     // Getteri
@@ -45,17 +44,12 @@ public class Vozilo {
         return registracija;
     }
 
-    public String getOpis() {
-        return opis;
-    }
+
 
     public String getEmail() {
         return email;
     }
 
-    public String getDatum() {
-        return datum;
-    }
 
     // Setteri
     public void setId(int id) {
@@ -78,15 +72,10 @@ public class Vozilo {
         this.registracija = registracija;
     }
 
-    public void setOpis(String opis) {
-        this.opis = opis;
-    }
+
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setDatum(String datum) {
-        this.datum = datum;
-    }
 }

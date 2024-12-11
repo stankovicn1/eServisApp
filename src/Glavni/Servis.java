@@ -1,20 +1,44 @@
 package Glavni;
 
+
+
 public class Servis {
+    private int idServis;
+    private String opisServis;
+    private String datum;
+    private int vozilo_id;
 
-    // Konstruktor se poziva prilikom kreiranja novog objekta klase Servis, prima dva parametra i inicijalizuje privatne atribute klase sa prosledjenim vrednostima
-    private String datumServisa;
-    private String opis;
+    // Konstruktor
+    public Servis(int idServis, String opisServis, String datum, int vozilo_id) {
+        this.idServis = idServis;
+        this.opisServis = opisServis;
+        this.datum = datum;
+        this.vozilo_id = vozilo_id;
+    }
 
-    // Konstruktor i geteri
-    public Servis(String datumServisa, String opis){
-        this.datumServisa = datumServisa;
-        this.opis = opis;
+    // Getteri i setteri
+    public int getIdServis() {
+        return idServis;
     }
-    public String getDatumServisa(){
-        return datumServisa;
+    public String getOpisServis() {
+        return opisServis;
     }
-    public String getOpis(){
-        return opis;
+    public String getDatum() {
+        return datum;
+    }
+    public int getVoziloId(){
+        return vozilo_id;
+    }
+    public void setIdServis(int idServis) {
+        this.idServis = idServis;
+    }
+    public void setOpisServis(String opisServis) {
+        this.opisServis = opisServis;
+    }
+    public void setDatum(String datum) {
+        this.datum = datum;
+    }
+    public void setVoziloId(int vozilo_id){
+        this.vozilo_id = vozilo_id;
     }
 }

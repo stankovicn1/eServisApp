@@ -17,7 +17,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
 import java.sql.*;
+import java.time.LocalDate;
 
+import static Glavni.UnosUBazu.unosServisa;
 
 
 public class MojGUI {
@@ -119,12 +121,10 @@ public class MojGUI {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String model = rs.getString("model");
-                //String datum = rs.getString("datum");
-                //String opis = rs.getString("opis");
                 String registracija = rs.getString("registracija");
 
                 // Kreira objekat vozilo sa ucitanim podacima
-                Vozilo vozilo = new Vozilo(id,"", model,"",registracija,"");
+                Vozilo vozilo = new Vozilo(id, "", model, "", registracija, "");
                 podaciIzBaze.add(vozilo); // Dodaje vozilo u listu podataka
             }
 
@@ -136,27 +136,22 @@ public class MojGUI {
         TableColumn<Vozilo, String> modelColumn = new TableColumn<>("Model");
         modelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
 
-       /* TableColumn<Vozilo, String> datumColumn = new TableColumn<>("Datum");
-        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));*/
-
-       /* TableColumn<Vozilo, String> opisColumn = new TableColumn<>("Opis");
-        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));*/
-
         TableColumn<Vozilo, String> registracijaColumn = new TableColumn<>("Registracija");
         registracijaColumn.setCellValueFactory(new PropertyValueFactory<>("registracija"));
-
-       /* // Dodavanje kolona za checkbox
-        TableColumn<Vozilo, Boolean> poceoCheckboxColumn = new TableColumn<>("Poceo da radi");
-        poceoCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
-        poceoCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());
-
-        TableColumn<Vozilo, Boolean> zavrsenCheckboxColumn = new TableColumn<>("Zavrsen rad");
-        zavrsenCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
-        zavrsenCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());*/
 
         // Dodavanje kolona u tabelu
         tabelaServisa.getColumns().addAll(modelColumn, registracijaColumn);
         tabelaServisa.setItems(podaciIzBaze);
+
+        // Dodavanje detekcije duplog klika
+        tabelaServisa.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Provera da li je kliknut dupli klik
+                Vozilo selectedVozilo = tabelaServisa.getSelectionModel().getSelectedItem();
+                if (selectedVozilo != null) {
+                    otvoriProzorSaDetaljima(selectedVozilo);
+                }
+            }
+        });
 
         // Kreiranje prozora
         Stage stageServisera = new Stage();
@@ -171,47 +166,66 @@ public class MojGUI {
         stageServisera.show();
     }
 
-   /* private class CheckBoxTableCell extends TableCell<Vozilo, Boolean> {
-        private final CheckBox checkBox = new CheckBox();
+    // Metoda koja otvara novi prozor sa podacima o vozilu
+    private void otvoriProzorSaDetaljima(Vozilo vozilo) {
+        Stage noviProzor = new Stage();
+        noviProzor.setTitle("Detalji o vozilu");
 
-        public CheckBoxTableCell() {
-            checkBox.setOnAction(e -> {
-                Vozilo vozilo = getTableView().getItems().get(getIndex());
-                String statusKolona = this.getTableColumn().getText().equals("Poceo da radi") ? "poceo da radi" : "zavrsen rad";
-                boolean status = checkBox.isSelected();
-                azurirajStatus();
-            });
-        }*/
+        // Kreiranje labela za prikaz podataka
+        Label modelLabel = new Label("Model: " + vozilo.getModel());
+        Label registracijaLabel = new Label("Registracija: " + vozilo.getRegistracija());
+        modelLabel.setFont(Font.font(18));
+        registracijaLabel.setFont(Font.font(18));
 
-     /*   @Override
-        protected void updateItem(Boolean item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty) {
-                setGraphic(null);
+        // Labela i TextArea za unos opisa
+        Label opisLab = new Label("Unesite opis servisa");
+        opisLab.setFont(Font.font(18));
+        TextArea opiis = new TextArea();
+        opiis.setPromptText("Unesite opis");
+
+        // Dodavanje DatePicker-a za odabir datuma
+        Label datumLab = new Label("Odaberite datum servisa");
+        DatePicker datePicker = new DatePicker();  // Kreiranje DatePicker-a
+
+        // Dugme za potvrdu
+        Button potvrdiButton = new Button("Potvrdi");
+        potvrdiButton.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+
+        potvrdiButton.setOnAction(e -> {
+            // Prikupljanje podataka iz TextArea i DatePicker-a
+            String opis = opiis.getText();
+            LocalDate datum = datePicker.getValue();
+
+            if (datum != null && !opis.isEmpty()) {
+                // Kreiranje Servis objekta sa unesenim podacima
+                // Pretpostavljamo da je idServis automatski generisan u bazi, pa šaljemo 0 kao placeholder
+                Servis servis = new Servis(0, opis, datum.toString(), vozilo.getId()); // Koristi vozilo ID iz objekta vozilo
+
+                // Pozivanje metode za unos servisa
+                boolean uspeh = unosServisa(servis);
+                if (uspeh) {
+                    System.out.println("Uspešno ste uneli servis.");
+                    noviProzor.close();  // Zatvori prozor nakon uspešnog unosa
+                } else {
+                    System.out.println("Došlo je do greške pri unosu servisa.");
+                }
             } else {
-                setGraphic(checkBox);
+                System.out.println("Molimo unesite sve podatke.");
             }
-        }
-    }*/
+        });
 
-   /* public void azurirajStatus() {
-        try {
-            Connection connection = DbKonekcija.getConnection();
-            String query = "UPDATE statusservisa SET status = ? WHERE vozilo_id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, "zavrsen rad");
-            statement.setInt(2, 1);
+        // Dodavanje svih elemenata u layout
+        VBox layout = new VBox(10);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(modelLabel, registracijaLabel, opisLab, opiis, datumLab, datePicker, potvrdiButton);
 
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Status uspešno ažuriran.");
-            } else {
-                System.out.println("Nema ažuriranih redova ili vozilo_id nije pronađen.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }*/
+        // Kreiranje scene
+        Scene scene = new Scene(layout, 800, 500);
+        noviProzor.setScene(scene);
+        noviProzor.show();
+    }
+
+
 
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos

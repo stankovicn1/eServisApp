@@ -24,7 +24,7 @@ public class MojGUI {
     public MojGUI() throws SQLException {
     }
 
-    public Scene getscene(Stage stage){ // Pocetni prozor
+    public Scene getscene(Stage stage){ // Pocetni prozor sa prikazom poruke dobrodoslice i dugmetom za prelaz na sledeci prozor
         Label label = new Label("eServisnaKnjizica");
         label.setFont(new Font("Arial", 55));
 
@@ -36,7 +36,7 @@ public class MojGUI {
         return new Scene(vbox, 700, 400);
     }
 
-    public Scene getscene2(Stage stage){ // Prozor za unos lozinke
+    public Scene getscene2(Stage stage){ // Prozor za unos lozinke sa dugmetom nazad i potvrdi
         Label labeldvojka = new Label("Unesi lozinku");
         labeldvojka.setFont(new Font("Arial", 35));
         labeldvojka.setPadding(new Insets(20));
@@ -50,11 +50,13 @@ public class MojGUI {
         Button dugmePrijava = new Button("Potvrdi");
         dugmePrijava.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
-        ProveraLozinke proveraLozinke = new ProveraLozinke();
+        ProveraLozinke proveraLozinke = new ProveraLozinke(); // Kreira objekat klase ProveraLozinke
 
+        // Dugme prihvata unos teksta i smesta ga u promenljivu tipa String
         dugmePrijava.setOnAction(e -> {
             String unesenaLozinka = lozinka.getText();
 
+            // Prosledjuje se String sa unosom na proveru i poziva se metoda za proveru lozinke iz klase ProveraLozinke, ako je uspesna postavlja sledeci prozor, odnosno prikazuje gresku
             if (proveraLozinke.checkPassword(unesenaLozinka)) {
                 stage.setScene(getscene3(stage));
             } else {
@@ -68,7 +70,7 @@ public class MojGUI {
         vBoxdvojka.setAlignment(Pos.CENTER);
         return new Scene(vBoxdvojka, 700, 400);
     }
-
+    // Metoda za prikaz poruke tipa Alert
     private void prikaziPoruku(String naslov, String poruka) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(naslov);
@@ -89,6 +91,7 @@ public class MojGUI {
         Button zatvori = new Button("Izlaz");
         zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
+        // Funkcionalnosti za button
         evidencija.setOnAction(e -> stage.setScene(getSceneEvidencija(stage)));
         zaServisera.setOnAction(e -> otvoriProzorServisi());
         unosServis.setOnAction(e -> stage.setScene(getscenaZaUnos(stage)));
@@ -102,15 +105,17 @@ public class MojGUI {
 
     private void otvoriProzorServisi() {
         // Inicijalizacija tabele
-        tabelaServisa = new TableView<>();
+        tabelaServisa = new TableView<>(); // Kreira novu instancu TableView za prikaz podataka
 
+        // Kreira listu koja ce cuvati podatke iz baze
         ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
 
         // Dobavljanje podataka iz baze
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila")) { // SQL upit za dobijanje podataka o vozilima
 
+            // Petlja kroz rezultate upita
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String model = rs.getString("model");
@@ -118,8 +123,9 @@ public class MojGUI {
                 //String opis = rs.getString("opis");
                 String registracija = rs.getString("registracija");
 
+                // Kreira objekat vozilo sa ucitanim podacima
                 Vozilo vozilo = new Vozilo(id,"", model,"",registracija,"");
-                podaciIzBaze.add(vozilo);
+                podaciIzBaze.add(vozilo); // Dodaje vozilo u listu podataka
             }
 
         } catch (SQLException e) {
@@ -214,20 +220,20 @@ public class MojGUI {
         Label markaL = new Label("Izaberite klasu");
         markaL.setFont(Font.font(18));
 
-// ComboBox za marku automobila
+    // ComboBox za marku automobila
         ComboBox<String> klasa = new ComboBox<>();
         klasa.getItems().addAll("A", "B", "C", "E", "S", "G","CLA","CLS","GLA","GLB","GLC", "GLE", "GLS");
         klasa.setPromptText("Izaberite klasu automobila");
 
-// Label za model automobila
+    // Label za model automobila
         Label modelL = new Label("Izaberite model");
         modelL.setFont(Font.font(18));
 
-// ComboBox za model automobila
+    // ComboBox za model automobila
         ComboBox<String> model = new ComboBox<>();
         model.setPromptText("Izaberite model automobila");
 
-// Dodavanje primera modela u zavisnosti od marke
+    // Dodavanje primera modela u zavisnosti od marke
         klasa.setOnAction(e -> {
             model.getItems().clear(); // Očisti prethodne opcije
             String selectedBrand = klasa.getValue();
@@ -420,8 +426,8 @@ public class MojGUI {
                     return;
                 }
 
-                // Pretpostavljamo da `id` možete generisati automatski ili dobiti iz baze
-                int generisanId = 0; // Zamenite ovo logikom za generisanje ili dohvat ID iz baze
+
+                int generisanId = 0; //
                 Vozilo novoVozilo = new Vozilo(
                         generisanId,           // Prosleđujemo generisan ID
                         izabranaKlasa,

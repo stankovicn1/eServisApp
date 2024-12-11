@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 
 import java.sql.*;
 
+
+
 public class MojGUI {
     public MojGUI() throws SQLException {
     }
@@ -37,6 +39,7 @@ public class MojGUI {
     public Scene getscene2(Stage stage){
         Label labeldvojka = new Label("Unesi lozinku");
         labeldvojka.setFont(new Font("Arial", 35));
+        labeldvojka.setPadding(new Insets(20));
 
         PasswordField lozinka = new PasswordField();
         lozinka.setPromptText("Unesite lozinku");
@@ -95,24 +98,27 @@ public class MojGUI {
         treciProzor.setAlignment(Pos.CENTER);
         return new Scene(treciProzor, 700, 400);
     }
+    private TableView<Vozilo> tabelaServisa; // Deklaracija tabele
+
     private void otvoriProzorServisi() {
         // Inicijalizacija tabele
-        tabelaServisa = new TableView<>(); // Kreiramo instancu TableView pre bilo kakvog korišćenja
+        tabelaServisa = new TableView<>();
 
         ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
 
         // Dobavljanje podataka iz baze
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT model, datum, opis, registracija FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, model, datum, opis, registracija FROM vozila")) {
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String model = rs.getString("model");
                 String datum = rs.getString("datum");
                 String opis = rs.getString("opis");
                 String registracija = rs.getString("registracija");
 
-                Vozilo vozilo = new Vozilo("", model, "", registracija, opis, "", datum);
+                Vozilo vozilo = new Vozilo(id,"", model,"",registracija,opis,"",datum);
                 podaciIzBaze.add(vozilo);
             }
 
@@ -136,63 +142,17 @@ public class MojGUI {
         // Dodavanje kolona za checkbox
         TableColumn<Vozilo, Boolean> poceoCheckboxColumn = new TableColumn<>("Poceo da radi");
         poceoCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
-        poceoCheckboxColumn.setCellFactory(col -> {
-            TableCell<Vozilo, Boolean> cell = new TableCell<>() {
-                private final CheckBox checkBox = new CheckBox();
-
-                {
-                    checkBox.setOnAction(e -> {
-                        Vozilo vozilo = getTableView().getItems().get(getIndex());
-                        System.out.println("Poceo da radi: " + vozilo.getModel());
-                    });
-                }
-
-                @Override
-                protected void updateItem(Boolean item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        setGraphic(checkBox);
-                    }
-                }
-            };
-            return cell;
-        });
+        poceoCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());
 
         TableColumn<Vozilo, Boolean> zavrsenCheckboxColumn = new TableColumn<>("Zavrsen rad");
         zavrsenCheckboxColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(false));
-        zavrsenCheckboxColumn.setCellFactory(col -> {
-            TableCell<Vozilo, Boolean> cell = new TableCell<>() {
-                private final CheckBox checkBox = new CheckBox();
-
-                {
-                    checkBox.setOnAction(e -> {
-                        Vozilo vozilo = getTableView().getItems().get(getIndex());
-                        System.out.println("Zavrsen rad: " + vozilo.getModel());
-                    });
-                }
-
-                @Override
-                protected void updateItem(Boolean item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        setGraphic(checkBox);
-                    }
-                }
-            };
-            return cell;
-        });
+        zavrsenCheckboxColumn.setCellFactory(col -> new CheckBoxTableCell());
 
         // Dodavanje kolona u tabelu
         tabelaServisa.getColumns().addAll(modelColumn, datumColumn, opisColumn, registracijaColumn, poceoCheckboxColumn, zavrsenCheckboxColumn);
-
-        // Postavljanje podataka u tabelu
         tabelaServisa.setItems(podaciIzBaze);
 
-        // Priprema prozora
+        // Kreiranje prozora
         Stage stageServisera = new Stage();
         stageServisera.setTitle("Podaci o Servisima");
 
@@ -205,10 +165,47 @@ public class MojGUI {
         stageServisera.show();
     }
 
-    private TableView<Vozilo> tabelaServisa; // Deklaracija tabele
+    private class CheckBoxTableCell extends TableCell<Vozilo, Boolean> {
+        private final CheckBox checkBox = new CheckBox();
 
+        public CheckBoxTableCell() {
+            checkBox.setOnAction(e -> {
+                Vozilo vozilo = getTableView().getItems().get(getIndex());
+                String statusKolona = this.getTableColumn().getText().equals("Poceo da radi") ? "poceo da radi" : "zavrsen rad";
+                boolean status = checkBox.isSelected();
+                azurirajStatus();
+            });
+        }
 
+        @Override
+        protected void updateItem(Boolean item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+                setGraphic(null);
+            } else {
+                setGraphic(checkBox);
+            }
+        }
+    }
 
+    public void azurirajStatus() {
+        try {
+            Connection connection = DbKonekcija.getConnection();
+            String query = "UPDATE statusservisa SET status = ? WHERE vozilo_id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, "zavrsen rad");
+            statement.setInt(2, 1);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Status uspešno ažuriran.");
+            } else {
+                System.out.println("Nema ažuriranih redova ili vozilo_id nije pronađen.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos
@@ -423,8 +420,10 @@ public class MojGUI {
                     return;
                 }
 
-                // Vrednosti se prosledjuju objektu preko konstruktora
+                // Pretpostavljamo da `id` možete generisati automatski ili dobiti iz baze
+                int generisanId = 0; // Zamenite ovo logikom za generisanje ili dohvat ID iz baze
                 Vozilo novoVozilo = new Vozilo(
+                        generisanId,           // Prosleđujemo generisan ID
                         izabranaKlasa,
                         izabraniModel,
                         unesenoGodiste,
@@ -433,6 +432,7 @@ public class MojGUI {
                         uneseniEmail,
                         izabranDatum
                 );
+
 
                 boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo); // Objekat Vozilo se prosledjuje metodi za unos
 
@@ -489,11 +489,13 @@ public class MojGUI {
 
         // Učitavanje podataka iz baze
         ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
+
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT klasa, model, datum, godiste, opis, email, registracija FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, klasa, model, datum, godiste, opis, email, registracija FROM vozila")) {
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String klasa = rs.getString("klasa");
                 String model = rs.getString("model");
                 String datum = rs.getString("datum");
@@ -502,41 +504,23 @@ public class MojGUI {
                 String email = rs.getString("email");
                 String registracija = rs.getString("registracija");
 
-                Vozilo vozilo = new Vozilo(klasa, model, godiste, registracija, opis, email, datum);
+                // Kreiranje objekta Vozilo sa id-jem
+                Vozilo vozilo = new Vozilo(id, klasa, model, godiste, registracija, opis, email, datum);
                 podaciIzBaze.add(vozilo);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+
         // Postavljanje podataka u tabelu
         tabelaEvidencija.setItems(podaciIzBaze);
 
-        // Polje za pretragu
-        TextField pretragaField = new TextField();
-        pretragaField.setPromptText("Pretraži po bilo kom polju");
-
-        // Dodavanje funkcionalnosti za pretragu
         FilteredList<Vozilo> filtriraniPodaci = new FilteredList<>(podaciIzBaze, p -> true);
-        pretragaField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filtriraniPodaci.setPredicate(vozilo -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true; // Prikaz svih podataka ako polje za pretragu nije popunjeno
-                }
-                String filter = newValue.toLowerCase();
-                return vozilo.getKlasa().toLowerCase().contains(filter) ||
-                        vozilo.getModel().toLowerCase().contains(filter) ||
-                        vozilo.getDatum().toLowerCase().contains(filter) ||
-                        vozilo.getGodiste().toLowerCase().contains(filter) ||
-                        vozilo.getOpis().toLowerCase().contains(filter) ||
-                        vozilo.getEmail().toLowerCase().contains(filter) ||
-                        vozilo.getRegistracija().toLowerCase().contains(filter);
-            });
-        });
+        TextField pretragaField = new TextField();
 
-        // Povezivanje filtriranih podataka sa tabelom
-        tabelaEvidencija.setItems(filtriraniPodaci);
+        // Inicijalizacija pretrage
+        Pretraga.inicijalizujPretragu(pretragaField, filtriraniPodaci, tabelaEvidencija);
 
         // Kreiranje layout-a
         VBox evidencijaLayout = new VBox(10, pretragaField, tabelaEvidencija, nazadButton);

@@ -3,16 +3,18 @@ package Glavni;
 public class Vozilo {
 
     // Privatni atributi
+    private int id; // Jedinstveni identifikator
     private String klasa;
     private String model;
     private String godiste;
     private String registracija;
     private String opis;
     private String email;
-    private String datum; // Pretvoren u String za lakšu obradu datuma
+    private String datum;
 
-    // Konstruktor za inicijalizaciju
-    public Vozilo(String klasa, String model, String godiste, String registracija, String opis, String email, String datum) {
+    // Konstruktor za inicijalizaciju sa ID-jem
+    public Vozilo(int id, String klasa, String model, String godiste, String registracija, String opis, String email, String datum) {
+        this.id = id;
         this.klasa = klasa;
         this.model = model;
         this.godiste = godiste;
@@ -23,6 +25,10 @@ public class Vozilo {
     }
 
     // Getteri
+    public int getId() {
+        return id;
+    }
+
     public String getKlasa() {
         return klasa;
     }
@@ -52,7 +58,11 @@ public class Vozilo {
     }
 
     // Setteri
-    public void setMarka(String klasa) {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setKlasa(String klasa) {
         this.klasa = klasa;
     }
 

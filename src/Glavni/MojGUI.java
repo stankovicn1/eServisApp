@@ -382,66 +382,73 @@ public class MojGUI {
 
         Label registracijaL = new Label("Unesite registarske oznake");
         registracijaL.setFont(Font.font(18));
-        TextField registracija = new TextField();;
+        TextField registracija = new TextField();
         registracija.setPromptText("Unesite registarske oznake");
 
-      /*  Label opisL = new Label("Unesite opis");
-        opisL.setFont(Font.font(18));
-        TextArea opis = new TextArea();
-        opis.setPromptText("Unesite opis servisa");
-*/
         Label emailL = new Label("Unesite email");
         emailL.setFont(Font.font(18));
         TextArea email = new TextArea();
         email.setPromptText("Unesite email");
 
-
-/*
-        Label datumL = new Label("Izaberite datum");
-        datumL.setFont(Font.font(18));
-        DatePicker datum = new DatePicker();
-        datum.setPromptText("Izaberite datum");*/
-
+// Dodavanje dugmadi
         Button nazad = new Button("Nazad");
         nazad.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
-
-        Button unos = new Button("Potrvdi");
+        Button unos = new Button("Potvrdi");
         unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
+// Akcija dugmeta "Nazad"
         nazad.setOnAction(e -> stage.setScene(getscene3(stage)));
-        UnosUBazu u = new UnosUBazu(); // Kreira objekat klase za unos u bazu
 
+// Akcija dugmeta "Unos"
         unos.setOnAction(e -> {
-            try { // Dohvata vrednosti iz polja
+            try {
+                // Dohvata vrednosti iz polja
                 String izabranaKlasa = klasa.getValue();
                 String izabraniModel = model.getValue();
                 String unesenoGodiste = godiste.getText();
                 String unesenaRegistracija = registracija.getText();
-                //String uneseniOpis = opis.getText();
                 String uneseniEmail = email.getText();
-                //String izabranDatum = datum.getValue().toString();
 
+                // Provera obaveznih polja
                 if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty()) {
                     prikaziPoruku("Greška", "Molimo popunite obavezna polja.");
                     return;
                 }
 
+                // Provera validnosti godine
+                if (!unesenoGodiste.matches("\\d{4}") || Integer.parseInt(unesenoGodiste) < 1920 || Integer.parseInt(unesenoGodiste) > 2100) {
+                    prikaziPoruku("Greška", "Godiste mora biti u rasponu od 1920 do 2100.");
+                    return;
+                }
 
-                int generisanId = 0; //
+                // Provera validnosti registarskih oznaka
+                if (!unesenaRegistracija.matches("[A-Za-z]{2}-\\d{2,5}-[A-Za-z]{2}")) {
+                    prikaziPoruku("Greška", "Registarske oznake moraju biti u formatu (XX-1234-XX).");
+                    return;
+                }
+
+                // Provera validnosti email adrese
+                String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,6}$";
+                if (!uneseniEmail.matches(emailRegex)) {
+                    prikaziPoruku("Greška", "Email mora biti u validnom formatu (npr. ime@example.com).");
+                    return;
+                }
+
+                // Kreiramo objekat vozila i unosimo ga u bazu
+                int generisanId = 0;
                 Vozilo novoVozilo = new Vozilo(
                         generisanId,           // Prosleđujemo generisan ID
                         izabranaKlasa,
                         izabraniModel,
                         unesenoGodiste,
                         unesenaRegistracija,
-                        //uneseniOpis,
                         uneseniEmail
-                        //izabranDatum
                 );
 
+                // Pozivamo metodu za unos u bazu
+                boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo);
 
-                boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo); // Objekat Vozilo se prosledjuje metodi za unos
-
+                // Obavestavamo korisnika o uspešnom unosu ili grešci
                 if (unosUspesan) {
                     prikaziPoruku("Uspešno", "Vozilo je uspešno uneto u bazu.");
                 } else {
@@ -452,6 +459,7 @@ public class MojGUI {
                 prikaziPoruku("Greška", "Došlo je do greške: " + ex.getMessage());
             }
         });
+
 
 
         VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);

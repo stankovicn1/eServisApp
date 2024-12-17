@@ -181,6 +181,12 @@ public class ProzorZaUnos {
         TextField registracija = new TextField();
         registracija.setPromptText("Unesite registarske oznake");
 
+        Label kilometrazaL = new Label("Unesite kilometrazu");
+        kilometrazaL.setFont(Font.font(18));
+        TextField kilometraza = new TextField();
+        kilometraza.setPromptText("Unestie kilometrazu");
+
+
         Label emailL = new Label("Unesite email");
         emailL.setFont(Font.font(18));
         TextArea email = new TextArea();
@@ -205,6 +211,7 @@ public class ProzorZaUnos {
                 String izabraniModel = model.getValue();
                 String unesenoGodiste = godiste.getText();
                 String unesenaRegistracija = registracija.getText();
+                String unesenaKilometraza = kilometraza.getText();
                 String uneseniEmail = email.getText();
 
 
@@ -241,6 +248,7 @@ public class ProzorZaUnos {
                         izabraniModel,
                         unesenoGodiste,
                         unesenaRegistracija,
+                        unesenaKilometraza,
                         uneseniEmail
                 );
 
@@ -261,7 +269,7 @@ public class ProzorZaUnos {
 
 
 
-        VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
+        VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, kilometrazaL, kilometraza /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
         return new Scene(noviUnos, 1100, 900);
 

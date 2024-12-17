@@ -51,14 +51,17 @@ public class EvidencijaProzor{
         TableColumn<Vozilo, String> registracijaColumn = new TableColumn<>("Registracija");
         registracijaColumn.setCellValueFactory(new PropertyValueFactory<>("registracija"));
 
-        tabelaEvidencija.getColumns().addAll(klasaColumn, modelColumn, /*datumColumn,*/ godisteColumn, /*opisColumn, */emailColumn, registracijaColumn);
+        TableColumn<Vozilo, String> kilometrazaColumn = new TableColumn<>("Kilometraza");
+        kilometrazaColumn.setCellValueFactory(new PropertyValueFactory<>("Kilometraza"));
+
+        tabelaEvidencija.getColumns().addAll(klasaColumn, modelColumn, /*datumColumn,*/ godisteColumn, /*opisColumn, */emailColumn, registracijaColumn, kilometrazaColumn);
 
         // Učitavanje podataka iz baze
         ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
 
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, klasa, model, godiste, email, registracija FROM vozila")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, klasa, model, godiste, kilometraza, email, registracija FROM vozila")) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -69,9 +72,10 @@ public class EvidencijaProzor{
                 //String opis = rs.getString("opis");
                 String email = rs.getString("email");
                 String registracija = rs.getString("registracija");
+                String kilometraza = rs.getString("kilometraza");
 
                 // Kreiranje objekta Vozilo sa id-jem
-                Vozilo vozilo = new Vozilo(id, klasa, model, godiste, registracija, email);
+                Vozilo vozilo = new Vozilo(id, klasa, model, godiste, registracija, kilometraza, email);
                 podaciIzBaze.add(vozilo);
             }
         } catch (SQLException e) {

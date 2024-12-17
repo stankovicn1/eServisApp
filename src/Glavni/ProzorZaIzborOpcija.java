@@ -67,7 +67,7 @@ public class ProzorZaIzborOpcija {
                 String registracija = rs.getString("registracija");
 
                 // Kreira objekat vozilo sa ucitanim podacima
-                Vozilo vozilo = new Vozilo(id, "", model, "", registracija, "");
+                Vozilo vozilo = new Vozilo(id, "", model, "", registracija,"", "");
                 podaciIzBaze.add(vozilo); // Dodaje vozilo u listu podataka
             }
 

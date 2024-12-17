@@ -20,7 +20,8 @@ public class UnosUBazu {
             stmt.setString(2, vozilo.getModel());
             stmt.setString(3, vozilo.getGodiste());
             stmt.setString(4, vozilo.getRegistracija());
-            stmt.setString(5, vozilo.getEmail());
+            stmt.setString(5, vozilo.getKilometraza());
+            stmt.setString(6, vozilo.getEmail());
 
             int rezultat = stmt.executeUpdate();
 

@@ -9,17 +9,19 @@ public class Vozilo {
     private String model;
     private String godiste;
     private String registracija;
+    private String kilometraza;
 
     private String email;
 
 
     // Konstruktor za inicijalizaciju sa ID-jem
-    public Vozilo(int id, String klasa, String model, String godiste, String registracija, String email) {
+    public Vozilo(int id, String klasa, String model, String godiste, String registracija,String kilometraza, String email) {
         this.id = id;
         this.klasa = klasa;
         this.model = model;
         this.godiste = godiste;
         this.registracija = registracija;
+        this.kilometraza = kilometraza;
         this.email = email;
 
     }
@@ -45,6 +47,10 @@ public class Vozilo {
         return registracija;
     }
 
+    public String getKilometraza(){
+        return kilometraza;
+    }
+
 
 
     public String getEmail() {
@@ -67,6 +73,10 @@ public class Vozilo {
 
     public void setGodiste(String godiste) {
         this.godiste = godiste;
+    }
+
+    public void setKilometraza(String kilometraza){
+        this.kilometraza = kilometraza;
     }
 
     public void setRegistracija(String registracija) {

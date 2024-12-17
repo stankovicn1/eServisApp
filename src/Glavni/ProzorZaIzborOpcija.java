@@ -34,7 +34,7 @@ public class ProzorZaIzborOpcija {
         Button zatvori = new Button("Izlaz");
         zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
-        MojGUI novi = new MojGUI();
+        EvidencijaProzor novi = new EvidencijaProzor();
         ProzorZaUnos ppzu = new ProzorZaUnos();
         // Funkcionalnosti za button
         evidencija.setOnAction(e -> stage.setScene(novi.getSceneEvidencija(stage)));

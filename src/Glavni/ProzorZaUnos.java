@@ -1,3 +1,4 @@
+
 package Glavni;
 
 import javafx.geometry.Pos;
@@ -195,7 +196,7 @@ public class ProzorZaUnos {
 // Akcija dugmeta "Nazad"
         nazad.setOnAction(e -> stage.setScene(proz.getscene3(stage)));
 
-       ProzorZaUnosLozinke pzul = new ProzorZaUnosLozinke();
+        ProzorZaUnosLozinke pzul = new ProzorZaUnosLozinke();
 // Akcija dugmeta "Unos"
         unos.setOnAction(e -> {
             try {

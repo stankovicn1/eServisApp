@@ -1,28 +1,21 @@
 package Glavni;
 
-import javafx.application.Platform;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
 import java.sql.*;
-import java.time.LocalDate;
-
-import static Glavni.UnosUBazu.unosServisa;
 
 
-public class MojGUI {
+public class EvidencijaProzor{
    /* public MojGUI() throws SQLException {
     }*/
     ProzorZaIzborOpcija prozor3 = new ProzorZaIzborOpcija();

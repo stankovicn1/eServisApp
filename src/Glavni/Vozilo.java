@@ -24,6 +24,7 @@ public class Vozilo {
         this.kilometraza = kilometraza;
         this.email = email;
 
+
     }
 
     // Getteri
@@ -50,8 +51,6 @@ public class Vozilo {
     public String getKilometraza(){
         return kilometraza;
     }
-
-
 
     public String getEmail() {
         return email;

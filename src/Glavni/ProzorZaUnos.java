@@ -213,6 +213,7 @@ public class ProzorZaUnos {
                 String unesenaRegistracija = registracija.getText();
                 String unesenaKilometraza = kilometraza.getText();
                 String uneseniEmail = email.getText();
+                Boolean naCekanju = true;
 
 
                 // Provera obaveznih polja
@@ -249,7 +250,8 @@ public class ProzorZaUnos {
                         unesenoGodiste,
                         unesenaRegistracija,
                         unesenaKilometraza,
-                        uneseniEmail
+                        uneseniEmail,
+                        naCekanju
                 );
 
                 // Pozivamo metodu za unos u bazu

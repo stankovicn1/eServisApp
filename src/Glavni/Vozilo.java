@@ -10,12 +10,12 @@ public class Vozilo {
     private String godiste;
     private String registracija;
     private String kilometraza;
-
     private String email;
+    private boolean naCekanju;
 
 
     // Konstruktor za inicijalizaciju sa ID-jem
-    public Vozilo(int id, String klasa, String model, String godiste, String registracija,String kilometraza, String email) {
+    public Vozilo(int id, String klasa, String model, String godiste, String registracija,String kilometraza, String email, boolean naCekanju) {
         this.id = id;
         this.klasa = klasa;
         this.model = model;
@@ -23,6 +23,7 @@ public class Vozilo {
         this.registracija = registracija;
         this.kilometraza = kilometraza;
         this.email = email;
+        this.naCekanju = naCekanju;
 
 
     }
@@ -55,6 +56,9 @@ public class Vozilo {
     public String getEmail() {
         return email;
     }
+    public boolean isNaCekanju(){
+        return true;
+    }
 
 
     // Setteri
@@ -82,10 +86,13 @@ public class Vozilo {
         this.registracija = registracija;
     }
 
-
-
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setNaCekanju(boolean naCekanju){
+        this.naCekanju = naCekanju;
+    }
+
 
 }

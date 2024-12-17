@@ -11,7 +11,7 @@ public class UnosUBazu {
 
     // Unos podataka u bazu
     public static boolean unosVozila(Vozilo vozilo) {
-        String sql = "INSERT INTO vozila (klasa, model, godiste, registracija, kilometraza, email) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vozila (klasa, model, godiste, registracija, kilometraza, email, naCekanju) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection konekcija = DbKonekcija.getConnection();
              PreparedStatement stmt = konekcija.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS)) {
@@ -22,6 +22,7 @@ public class UnosUBazu {
             stmt.setString(4, vozilo.getRegistracija());
             stmt.setString(5, vozilo.getKilometraza());
             stmt.setString(6, vozilo.getEmail());
+            stmt.setBoolean(7,true);
 
             int rezultat = stmt.executeUpdate();
 

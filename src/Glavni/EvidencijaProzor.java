@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
 import java.sql.*;
+import java.util.Objects;
 
 
 public class EvidencijaProzor {
@@ -22,7 +23,7 @@ public class EvidencijaProzor {
     public Scene getSceneEvidencija(Stage stage) {
         // Dugme za povratak
         Button nazadButton = new Button("Nazad");
-        nazadButton.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+        //nazadButton.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
         nazadButton.setOnAction(e -> stage.setScene(prozor3.getscene3(stage)));
 
         // Kreiranje TableView za prikaz podataka
@@ -93,7 +94,10 @@ public class EvidencijaProzor {
         VBox evidencijaLayout = new VBox(10, pretragaField, tabelaEvidencija, nazadButton);
         evidencijaLayout.setPadding(new Insets(20));
 
-        return new Scene(evidencijaLayout, 800, 500);
+       // return new Scene(evidencijaLayout, 800, 500);
+        Scene scene = new Scene(evidencijaLayout, 700, 400);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        return scene;
     }
 }
 

@@ -8,13 +8,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class ProzorZaUnos {
     public Scene getscenaZaUnos(Stage stage){
         //Prozor za Novi unos
 
         // Label za marku automobila
         Label markaL = new Label("Izaberite klasu");
-        markaL.setFont(Font.font(18));
+        //markaL.setFont(Font.font(18));
+       // markaL.getStyleClass().add("small-label");
 
         // ComboBox za marku automobila
         ComboBox<String> klasa = new ComboBox<>();
@@ -23,7 +26,8 @@ public class ProzorZaUnos {
 
         // Label za model automobila
         Label modelL = new Label("Izaberite model");
-        modelL.setFont(Font.font(18));
+        //modelL.setFont(Font.font(18));
+       // modelL.getStyleClass().add("small-label");
 
         // ComboBox za model automobila
         ComboBox<String> model = new ComboBox<>();
@@ -166,9 +170,13 @@ public class ProzorZaUnos {
         });
 
         Label godisteL = new Label("Unesite godiste");
-        godisteL.setFont(Font.font(18));
         TextField godiste = new TextField();
         godiste.setPromptText("Unesite godiste");
+        //godiste.setPrefWidth(200);  // Postavljanje širine na 200px
+
+        godiste.setPrefWidth(200);
+        godiste.setMaxWidth(200);
+        godiste.setMinWidth(150);
 
         godiste.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -177,26 +185,52 @@ public class ProzorZaUnos {
         });
 
         Label registracijaL = new Label("Unesite registarske oznake");
-        registracijaL.setFont(Font.font(18));
         TextField registracija = new TextField();
         registracija.setPromptText("Unesite registarske oznake");
 
-        Label kilometrazaL = new Label("Unesite kilometrazu");
-        kilometrazaL.setFont(Font.font(18));
-        TextField kilometraza = new TextField();
-        kilometraza.setPromptText("Unestie kilometrazu");
+        registracija.setPrefWidth(200);
+        registracija.setMaxWidth(200);
+        registracija.setMinWidth(150);
 
+
+        Label kilometrazaL = new Label("Unesite kilometrazu");
+        TextField kilometraza = new TextField();
+        kilometraza.setPromptText("Unesite kilometrazu");
+
+        kilometraza.setPrefWidth(200);
+        kilometraza.setMaxWidth(200);
+        kilometraza.setMinWidth(150);
 
         Label emailL = new Label("Unesite email");
-        emailL.setFont(Font.font(18));
-        TextArea email = new TextArea();
+        TextField email = new TextField();
         email.setPromptText("Unesite email");
+
+        email.setPrefWidth(200);
+        email.setMaxWidth(200);
+        email.setMinWidth(150);
+
+
+/*// Dodavanje stilskih klasa
+        godiste.getStyleClass().add("godiste-textfield");
+        registracija.getStyleClass().add("registracija-textfield");
+        kilometraza.getStyleClass().add("kilometraza-textfield");
+        email.getStyleClass().add("email-textarea");
+
+// Dodavanje stilskih klasa za labele
+        godisteL.getStyleClass().add("small-label");
+        registracijaL.getStyleClass().add("small-label");
+        kilometrazaL.getStyleClass().add("small-label");
+        emailL.getStyleClass().add("small-label");*/
+
+
+
+
 
 // Dodavanje dugmadi
         Button nazad = new Button("Nazad");
-        nazad.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+       // nazad.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
         Button unos = new Button("Potvrdi");
-        unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
+       // unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         ProzorZaIzborOpcija proz = new ProzorZaIzborOpcija();
 // Akcija dugmeta "Nazad"
@@ -271,9 +305,14 @@ public class ProzorZaUnos {
 
 
 
-        VBox noviUnos = new VBox(10,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, kilometrazaL, kilometraza /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
+        VBox noviUnos = new VBox(15,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, kilometrazaL, kilometraza /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
-        return new Scene(noviUnos, 1100, 900);
+        //return new Scene(noviUnos, 1100, 900);
+
+        Scene scene = new Scene(noviUnos, 700, 600); // Vaš VBox ili drugi layout
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+
+        return scene;
 
     }
 }

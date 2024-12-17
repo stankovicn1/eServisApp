@@ -14,22 +14,23 @@ import javafx.stage.Stage;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static Glavni.UnosUBazu.unosServisa;
 
 public class ProzorZaIzborOpcija {
     public Scene getscene3(Stage stage){  // Prozor za izbor jedne od opcija
         Button zaServisera = new Button("Servisi");
-        zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+       // zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button unosServis = new Button("Novi unos");
-        unosServis.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+        //unosServis.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button evidencija = new Button("Evidencija");
-        evidencija.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+        //evidencija.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button zatvori = new Button("Izlaz");
-        zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+        //zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         EvidencijaProzor novi = new EvidencijaProzor();
         ProzorZaUnos ppzu = new ProzorZaUnos();
@@ -41,7 +42,11 @@ public class ProzorZaIzborOpcija {
 
         VBox treciProzor = new VBox(35, zaServisera, unosServis, evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);
-        return new Scene(treciProzor, 700, 400);
+        //return new Scene(treciProzor, 700, 400);
+
+        Scene scene = new Scene(treciProzor, 700, 400);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        return scene;
     }
     private TableView<Vozilo> tabelaServisa; // Deklaracija tabele
 

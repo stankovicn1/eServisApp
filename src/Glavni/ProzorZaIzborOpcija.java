@@ -100,7 +100,7 @@ public class ProzorZaIzborOpcija {
 
         // Kreiranje prozora
         Stage stageServisera = new Stage();
-        stageServisera.setTitle("Podaci o Servisima");
+        stageServisera.setTitle("Vozila na cekanju");
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
@@ -128,6 +128,13 @@ public class ProzorZaIzborOpcija {
         opisLab.setFont(Font.font(18));
         TextArea opiis = new TextArea();
         opiis.setPromptText("Unesite opis");
+        opiis.setPrefWidth(200);
+        opiis.setMaxWidth(200);
+        opiis.setMinWidth(150);
+
+        opiis.setPrefHeight(100);
+        opiis.setMaxHeight(100);
+        opiis.setMinHeight(75);
 
         // Dodavanje DatePicker-a za odabir datuma
         Label datumLab = new Label("Odaberite datum servisa");

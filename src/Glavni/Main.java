@@ -13,7 +13,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+
         PocetniProzor pocetak = new PocetniProzor(); // Kreira objekat klase MojGUI
+
 
         primaryStage.setScene(pocetak.getscene(primaryStage)); // Postavlja prvu scenu kao pocetni prozor i prikazuje ga
         primaryStage.setTitle("eServis");

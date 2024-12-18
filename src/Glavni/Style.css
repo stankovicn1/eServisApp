@@ -2,7 +2,7 @@
 
 /* Stil za korenski VBox */
 .root {
-    -fx-background-color: #f5f5f5; /* Svetlo siva pozadina */
+    -fx-background-color: #bcd3e6;
 }
 
 .large-label {
@@ -13,6 +13,7 @@
     -fx-font-size: 18px;
 
 }
+
 
 
 /* Stil za dugme */

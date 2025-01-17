@@ -21,16 +21,12 @@ import static Glavni.UnosUBazu.unosServisa;
 public class ProzorZaIzborOpcija {
     public Scene getscene3(Stage stage){  // Prozor za izbor jedne od opcija
         Button zaServisera = new Button("Servisi");
-       // zaServisera.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button unosServis = new Button("Novi unos");
-        //unosServis.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button evidencija = new Button("Evidencija");
-        //evidencija.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         Button zatvori = new Button("Izlaz");
-        //zatvori.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
 
         EvidencijaProzor novi = new EvidencijaProzor();
         ProzorZaUnos ppzu = new ProzorZaUnos();
@@ -42,7 +38,6 @@ public class ProzorZaIzborOpcija {
 
         VBox treciProzor = new VBox(35, zaServisera, unosServis, evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);
-        //return new Scene(treciProzor, 700, 400);
 
         Scene scene = new Scene(treciProzor, 700, 400);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
@@ -142,7 +137,8 @@ public class ProzorZaIzborOpcija {
 
         // Dugme za potvrdu
         Button potvrdiButton = new Button("Potvrdi");
-        potvrdiButton.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
+        potvrdiButton.setStyle("-fx-font-family: 'Arial'; -fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: linear-gradient(to bottom, #40c6de, #2a9ebd); -fx-border-color: #1d7687; -fx-border-width: 2px; -fx-border-radius: 25px; -fx-background-radius: 25px; -fx-padding: 10px 20px; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.3, 0, 2);");
+
 
         potvrdiButton.setOnAction(e -> {
             String opis = opiis.getText();
@@ -159,7 +155,7 @@ public class ProzorZaIzborOpcija {
                     // Uklonite vozilo iz trenutne liste podataka
                     podaciIzBaze.remove(vozilo);
 
-                    // Ažurirajte vrednost naCekanju u bazi na 0
+                    // Azurira vrednost naCekanju u bazi na 0
                     try (Connection conn = DbKonekcija.getConnection()) {
                         String updateQuery = "UPDATE vozila SET naCekanju = 0 WHERE id = ?";
                         try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
@@ -170,10 +166,43 @@ public class ProzorZaIzborOpcija {
                         ex.printStackTrace();
                     }
 
-                    // Osveži tabelu da prikaže samo vozila sa naCekanju = 1
+                    // Dohvati email iz tabele vozila
+                   /* try (Connection conn = DbKonekcija.getConnection()) {
+                        String emailQuery = "SELECT email FROM vozila WHERE id = ?";
+                        try (PreparedStatement stmt = conn.prepareStatement(emailQuery)) {
+                            stmt.setInt(1, vozilo.getId());
+                            ResultSet rs = stmt.executeQuery();
+                            if (rs.next()) {
+                                String email = rs.getString("email");
+
+                                // Pošaljite email ako je email dostupan
+                                if (email != null && !email.isEmpty()) {
+                                    String subject = "Potvrda obavljenog servisa za vozilo";
+                                    String message = "Vaše vozilo sa ID: " + vozilo.getId() + " je servisirano. Možete ga preuzeti.\n"
+                                            + "Opis servisa: " + opis + "\n"
+                                            + "Datum: " + datum;
+
+                                    try {
+                                        EmailSender.sendEmail(email, subject, message);
+                                        System.out.println("Poruka uspešno poslata na email: " + email);
+                                    } catch (Exception ex) {
+                                        System.out.println("Došlo je do greške prilikom slanja emaila: " + ex.getMessage());
+                                    }
+                                } else {
+                                    System.out.println("Email nije dostupan za vozilo ID=" + vozilo.getId());
+                                }
+                            } else {
+                                System.out.println("Email nije pronađen za vozilo ID=" + vozilo.getId());
+                            }
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }*/
+
+                    // Osveži tabelu da prikaze samo vozila sa naCekanju = 1
                     osveziTabelu(podaciIzBaze);
 
-                    // Zatvori prozor nakon uspešnog unosa
+                    // Zatvori prozor nakon uspesnog unosa
                     noviProzor.close();
                 } else {
                     System.out.println("Došlo je do greške pri unosu servisa.");
@@ -186,6 +215,9 @@ public class ProzorZaIzborOpcija {
 
 
 
+
+
+
         // Dodavanje svih elemenata u layout
         VBox layout = new VBox(10);
         layout.setAlignment(Pos.CENTER);
@@ -193,16 +225,17 @@ public class ProzorZaIzborOpcija {
 
         // Kreiranje scene
         Scene scene = new Scene(layout, 800, 500);
+        //scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         noviProzor.setScene(scene);
         noviProzor.show();
     }
 
     private void osveziTabelu(ObservableList<Vozilo> podaciIzBaze) {
 
-            // Očistite trenutnu listu podataka
+            // Ocistite trenutnu listu podataka
             podaciIzBaze.clear();
 
-            // Ponovo učitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
+            // Ponovo ucitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
             try (Connection conn = DbKonekcija.getConnection();
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila WHERE naCekanju = 1")) { // Samo vozila sa naCekanju = 1

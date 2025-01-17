@@ -31,7 +31,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.3, 0, 2); /* Sjena ispod */
 }
 
-/* Efekat prelaska miša (hover) */
+/* Efekat prelaska misa (hover) */
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #2a9ebd, #1d7687); /* Tamniji gradient */
     -fx-border-color: #166275; /* Tamnija ivica */

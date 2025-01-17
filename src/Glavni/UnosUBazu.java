@@ -27,7 +27,7 @@ public class UnosUBazu {
             int rezultat = stmt.executeUpdate();
 
             if (rezultat > 0) {
-                // Ako je unos uspešan, uzimamo poslednji generisani ID
+                // Ako je unos uspesan, uzimamo poslednji generisani ID
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         vozilo.setId(rs.getInt(1)); // Postavljamo ID u objekat vozilo
@@ -53,10 +53,10 @@ public class UnosUBazu {
             stmt.setInt(3, servis.getVoziloId()); // Vozilo ID iz objekta servis
 
             int rezultat = stmt.executeUpdate();
-            return rezultat > 0; // Vraća true ako je unos uspešan
+            return rezultat > 0; // Vraca true ako je unos uspesan
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Vraća false u slučaju greške
+            return false; // Vraca false u slucaju greske
         }
     }
     }

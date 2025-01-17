@@ -21,9 +21,9 @@ public class ProzorZaUnosLozinke {
 
         PasswordField lozinka = new PasswordField();
         lozinka.setPromptText("Unesite lozinku");
-        lozinka.setPrefWidth(200);  // Smanjenje širine PasswordField-a (promenite prema potrebi)
-        lozinka.setMaxWidth(200);   // Ograničite maksimalnu širinu
-        lozinka.setMinWidth(150);   // Ograničite minimalnu širinu
+        lozinka.setPrefWidth(200);  // Smanjenje sirine PasswordField-a (promenite prema potrebi)
+        lozinka.setMaxWidth(200);   // Ogranicava maksimalnu sirinu
+        lozinka.setMinWidth(150);   // Ogranicava minimalnu sirinu
 
         Button dugme2 = new Button("Nazad");
 

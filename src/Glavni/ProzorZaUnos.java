@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -16,8 +15,6 @@ public class ProzorZaUnos {
 
         // Label za marku automobila
         Label markaL = new Label("Izaberite klasu");
-        //markaL.setFont(Font.font(18));
-       // markaL.getStyleClass().add("small-label");
 
         // ComboBox za marku automobila
         ComboBox<String> klasa = new ComboBox<>();
@@ -26,8 +23,6 @@ public class ProzorZaUnos {
 
         // Label za model automobila
         Label modelL = new Label("Izaberite model");
-        //modelL.setFont(Font.font(18));
-       // modelL.getStyleClass().add("small-label");
 
         // ComboBox za model automobila
         ComboBox<String> model = new ComboBox<>();
@@ -172,7 +167,6 @@ public class ProzorZaUnos {
         Label godisteL = new Label("Unesite godiste");
         TextField godiste = new TextField();
         godiste.setPromptText("Unesite godiste");
-        //godiste.setPrefWidth(200);  // Postavljanje širine na 200px
 
         godiste.setPrefWidth(200);
         godiste.setMaxWidth(200);
@@ -228,9 +222,7 @@ public class ProzorZaUnos {
 
 // Dodavanje dugmadi
         Button nazad = new Button("Nazad");
-       // nazad.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
         Button unos = new Button("Potvrdi");
-       // unos.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px; ");
 
         ProzorZaIzborOpcija proz = new ProzorZaIzborOpcija();
 // Akcija dugmeta "Nazad"
@@ -278,7 +270,7 @@ public class ProzorZaUnos {
                 // Kreiramo objekat vozila i unosimo ga u bazu
                 int generisanId = 0;
                 Vozilo novoVozilo = new Vozilo(
-                        generisanId,           // Prosleđujemo generisan ID
+                        generisanId,           // Prosledjujemo generisan ID
                         izabranaKlasa,
                         izabraniModel,
                         unesenoGodiste,
@@ -307,7 +299,6 @@ public class ProzorZaUnos {
 
         VBox noviUnos = new VBox(15,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, kilometrazaL, kilometraza /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
-        //return new Scene(noviUnos, 1100, 900);
 
         Scene scene = new Scene(noviUnos, 700, 600); // Vaš VBox ili drugi layout
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());

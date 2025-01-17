@@ -17,9 +17,7 @@ public class PocetniProzor {
         label.getStyleClass().add("large-label");
 
         Button dugme = new Button("Prijavi se");
-        //dugme.setStyle("-fx-font: 18 arial; -fx-backround-color:#40c6de; -fx-text-fill: black; -fx-background-radius: 50px; -fx-padding: 10px 20px;");
         dugme.setOnAction(e -> {
-
                     ProzorZaUnosLozinke prozorzaloz = new ProzorZaUnosLozinke();
                     stage.setScene(prozorzaloz.getscene2(stage));
                 });

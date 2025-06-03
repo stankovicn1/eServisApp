@@ -8,4 +8,5 @@ Jednostavna aplikacija za vodjenje evidencija servisa radjena u Javi.
 - MySQL
 - Git
 
+  ## Autor
   Nikola Stankovic

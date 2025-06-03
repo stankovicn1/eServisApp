@@ -232,26 +232,26 @@ public class ProzorZaIzborOpcija {
 
     private void osveziTabelu(ObservableList<Vozilo> podaciIzBaze) {
 
-            // Ocistite trenutnu listu podataka
-            podaciIzBaze.clear();
+        // Ocistite trenutnu listu podataka
+        podaciIzBaze.clear();
 
-            // Ponovo ucitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
-            try (Connection conn = DbKonekcija.getConnection();
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila WHERE naCekanju = 1")) { // Samo vozila sa naCekanju = 1
+        // Ponovo ucitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
+        try (Connection conn = DbKonekcija.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila WHERE naCekanju = 1")) { // Samo vozila sa naCekanju = 1
 
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String model = rs.getString("model");
-                    String registracija = rs.getString("registracija");
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String model = rs.getString("model");
+                String registracija = rs.getString("registracija");
 
-                    // Kreira objekat vozilo sa učitanim podacima
-                    Vozilo vozilo = new Vozilo(id, "", model, "", registracija, "", "", true);
-                    podaciIzBaze.add(vozilo); // Dodajte vozilo u listu
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                // Kreira objekat vozilo sa učitanim podacima
+                Vozilo vozilo = new Vozilo(id, "", model, "", registracija, "", "", true);
+                podaciIzBaze.add(vozilo); // Dodajte vozilo u listu
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
     }
+
+}

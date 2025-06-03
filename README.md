@@ -7,6 +7,3 @@ Jednostavna aplikacija za vodjenje evidencija servisa radjena u Javi.
 - Java ( JavaFX )
 - MySQL
 - Git
-
-  ## Autor
-  Nikola Stankovic

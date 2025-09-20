@@ -36,13 +36,22 @@ public class EvidencijaProzor {
         Button nazadButton = new Button("Nazad");
         nazadButton.setOnAction(e -> stage.setScene(prozor3.getscene3(stage)));
 
-        VBox layout = new VBox(15, label, unosRegistracijeField, potvrdiButton, nazadButton);
-        layout.setPadding(new Insets(20));
+        // Layout za polje i dugme (centrirano)
+        VBox unosLayout = new VBox(10, label, unosRegistracijeField, potvrdiButton);
+        unosLayout.setPadding(new Insets(20));
+        unosLayout.setPrefWidth(300);
+        unosLayout.setStyle("-fx-alignment: center;");
 
-        Scene scene = new Scene(layout, 400, 200);
+        // Glavni layout
+        VBox layout = new VBox(20, unosLayout, nazadButton);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-alignment: center;");
+
+        Scene scene = new Scene(layout, 700, 400);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         return scene;
     }
+
 
     private Scene getSceneRezultat(Stage stage, String registracija) {
         TableView<VoziloServis> tabela = new TableView<>();
@@ -110,7 +119,7 @@ public class EvidencijaProzor {
         VBox layout = new VBox(15, tabela, nazadButton);
         layout.setPadding(new Insets(20));
 
-        Scene scene = new Scene(layout, 800, 500);
+        Scene scene = new Scene(layout, 700, 400);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         return scene;
     }

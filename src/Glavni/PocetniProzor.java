@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class PocetniProzor {
     public Scene getscene(Stage stage){ // Pocetni prozor sa prikazom poruke dobrodoslice i dugmetom za prelaz na sledeci prozor
-        Label label = new Label("eServisnaKnjizica");
+        Label label = new Label("eServisnaKnjizica Volvo Servis");
         //label.setFont(new Font("Arial", 55));
         label.getStyleClass().add("large-label");
 

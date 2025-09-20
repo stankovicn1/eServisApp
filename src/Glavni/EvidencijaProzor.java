@@ -2,33 +2,51 @@ package Glavni;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
 
 import java.sql.*;
 import java.util.Objects;
-
 
 public class EvidencijaProzor {
 
     ProzorZaIzborOpcija prozor3 = new ProzorZaIzborOpcija();
 
     public Scene getSceneEvidencija(Stage stage) {
-        // Dugme za povratak
+        Label label = new Label("Unesite registarske oznake:");
+
+        // Polje za unos registarskih oznaka
+        TextField unosRegistracijeField = new TextField();
+        unosRegistracijeField.setPromptText("npr. BG-123-AA");
+
+        // Dugme potvrdi
+        Button potvrdiButton = new Button("Potvrdi");
+        potvrdiButton.setOnAction(e -> {
+            String unos = unosRegistracijeField.getText().trim();
+            if (!unos.isEmpty()) {
+                stage.setScene(getSceneRezultat(stage, unos));
+            }
+        });
+
+        // Dugme nazad
         Button nazadButton = new Button("Nazad");
         nazadButton.setOnAction(e -> stage.setScene(prozor3.getscene3(stage)));
 
-        // Kreiranje TableView za prikaz podataka
-        TableView<VoziloServis> tabelaEvidencija = new TableView<>();
+        VBox layout = new VBox(15, label, unosRegistracijeField, potvrdiButton, nazadButton);
+        layout.setPadding(new Insets(20));
 
-        // Definisanje kolona
+        Scene scene = new Scene(layout, 400, 200);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        return scene;
+    }
+
+    private Scene getSceneRezultat(Stage stage, String registracija) {
+        TableView<VoziloServis> tabela = new TableView<>();
+
         TableColumn<VoziloServis, String> klasaColumn = new TableColumn<>("Klasa");
         klasaColumn.setCellValueFactory(new PropertyValueFactory<>("klasa"));
 
@@ -47,21 +65,25 @@ public class EvidencijaProzor {
         TableColumn<VoziloServis, String> kilometrazaColumn = new TableColumn<>("Kilometraža");
         kilometrazaColumn.setCellValueFactory(new PropertyValueFactory<>("kilometraza"));
 
-        // Nova kolona za opis servisa
         TableColumn<VoziloServis, String> opisServisColumn = new TableColumn<>("Opis Servisa");
         opisServisColumn.setCellValueFactory(new PropertyValueFactory<>("opisServis"));
 
-        // Dodavanje kolona u TableView
-        tabelaEvidencija.getColumns().addAll(klasaColumn, modelColumn, godisteColumn, emailColumn, registracijaColumn, kilometrazaColumn, opisServisColumn);
+        tabela.getColumns().addAll(
+                klasaColumn, modelColumn, godisteColumn,
+                emailColumn, registracijaColumn,
+                kilometrazaColumn, opisServisColumn
+        );
 
-        // Ucitavanje podataka iz baze
-        ObservableList<VoziloServis> podaciIzBaze = FXCollections.observableArrayList();
+        ObservableList<VoziloServis> rezultat = FXCollections.observableArrayList();
 
         try (Connection conn = DbKonekcija.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT v.id, v.klasa, v.model, v.godiste, v.kilometraza, v.email, v.registracija, s.opisServis " +
-                     "FROM vozila v " +
-                     "JOIN servis s ON v.id = s.vozilo_id")) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT v.id, v.klasa, v.model, v.godiste, v.kilometraza, v.email, v.registracija, s.opisServis " +
+                             "FROM vozila v " +
+                             "JOIN servis s ON v.id = s.vozilo_id " +
+                             "WHERE v.registracija = ?")) {
+            stmt.setString(1, registracija);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -69,34 +91,27 @@ public class EvidencijaProzor {
                 String model = rs.getString("model");
                 String godiste = rs.getString("godiste");
                 String email = rs.getString("email");
-                String registracija = rs.getString("registracija");
+                String reg = rs.getString("registracija");
                 String kilometraza = rs.getString("kilometraza");
-                String opisServis = rs.getString("opisServis");  // Opis servisa iz tabele servis
+                String opisServis = rs.getString("opisServis");
 
-                // Kreiranje objekta VoziloServisDTO sa svim podacima
-                VoziloServis voziloDTO = new VoziloServis(id, klasa, model, godiste, registracija, kilometraza, email, opisServis);
-                podaciIzBaze.add(voziloDTO);
+                rezultat.add(new VoziloServis(id, klasa, model, godiste, reg, kilometraza, email, opisServis));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // Postavljanje podataka u tabelu
-        tabelaEvidencija.setItems(podaciIzBaze);
+        tabela.setItems(rezultat);
 
-        // Filter za pretragu
-        FilteredList<VoziloServis> filtriraniPodaci = new FilteredList<>(podaciIzBaze, p -> true);
-        TextField pretragaField = new TextField();
-        Pretraga.inicijalizujPretragu(pretragaField, filtriraniPodaci, tabelaEvidencija);
+        // Dugme nazad
+        Button nazadButton = new Button("Nazad");
+        nazadButton.setOnAction(e -> stage.setScene(getSceneEvidencija(stage)));
 
-        // Kreiranje layout-a
-        VBox evidencijaLayout = new VBox(10, pretragaField, tabelaEvidencija, nazadButton);
-        evidencijaLayout.setPadding(new Insets(20));
+        VBox layout = new VBox(15, tabela, nazadButton);
+        layout.setPadding(new Insets(20));
 
-
-        Scene scene = new Scene(evidencijaLayout, 700, 400);
+        Scene scene = new Scene(layout, 800, 500);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         return scene;
     }
 }
-

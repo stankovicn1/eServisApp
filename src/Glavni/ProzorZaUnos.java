@@ -114,11 +114,11 @@ public class ProzorZaUnos {
         Button nazad = new Button("Nazad");
         Button unos = new Button("Potvrdi");
 
-        ProzorZaIzborOpcija proz = new ProzorZaIzborOpcija();
+        GlavniMeni proz = new GlavniMeni();
 // Akcija dugmeta "Nazad"
         nazad.setOnAction(e -> stage.setScene(proz.getscene3(stage)));
 
-        ProzorZaUnosLozinke pzul = new ProzorZaUnosLozinke();
+        LoginProzor pzul = new LoginProzor();
 // Akcija dugmeta "Unos"
         unos.setOnAction(e -> {
             try {

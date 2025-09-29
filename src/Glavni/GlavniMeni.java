@@ -18,7 +18,7 @@ import java.util.Objects;
 
 import static Glavni.UnosUBazu.unosServisa;
 
-public class ProzorZaIzborOpcija {
+public class GlavniMeni {
     public Scene getscene3(Stage stage){  // Prozor za izbor jedne od opcija
         Button zaServisera = new Button("Servisi");
 

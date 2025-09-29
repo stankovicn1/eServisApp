@@ -10,7 +10,7 @@ import javafx.scene.control.TableView;
 
 public class Pretraga {
 
-    // Genericka metoda koja radi sa bilo kojim tipom objekta
+    // Generička metoda koja radi sa bilo kojim tipom objekta
     public static <T> void inicijalizujPretragu(TextField pretragaField, FilteredList<T> filtriraniPodaci, TableView<T> tabelaEvidencija) {
         pretragaField.setPromptText("Pretraži po bilo kom polju");
 

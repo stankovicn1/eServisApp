@@ -31,13 +31,13 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.3, 0, 2); /* Sjena ispod */
 }
 
-/* Efekat prelaska misa (hover) */
+/* Efekat prelaska miša */
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #2a9ebd, #1d7687); /* Tamniji gradient */
     -fx-border-color: #166275; /* Tamnija ivica */
 }
 
-/* Efekat pritiska (pressed) */
+/* Efekat pritiska */
 .button:pressed {
     -fx-background-color: linear-gradient(to bottom, #166275, #0e4a56); /* Još tamniji gradient */
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.4), 3, 0.3, 0, 1); /* Unutrašnja senka */

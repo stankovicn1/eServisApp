@@ -1,4 +1,4 @@
-package Glavni;
+package Glavni.controller;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

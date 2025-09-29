@@ -1,6 +1,8 @@
 
-package Glavni;
+package Glavni.controller;
 
+import Glavni.service.UnosUBazu;
+import Glavni.model.Vozilo;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

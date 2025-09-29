@@ -1,4 +1,4 @@
-package Glavni;
+package Glavni.model;
 
 public class VoziloServis{
     private int id;

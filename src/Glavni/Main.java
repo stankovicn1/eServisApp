@@ -1,4 +1,6 @@
 package Glavni;
+import Glavni.config.DbKonekcija;
+import Glavni.controller.PocetniProzor;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        PocetniProzor pocetak = new PocetniProzor(); // Kreira objekat klase MojGUI
+        PocetniProzor pocetak = new PocetniProzor(); // Kreira objekat klase PocetniProzor
 
 
         primaryStage.setScene(pocetak.getscene(primaryStage)); // Postavlja prvu scenu kao pocetni prozor i prikazuje ga

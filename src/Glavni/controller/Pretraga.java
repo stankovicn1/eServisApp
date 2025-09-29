@@ -1,9 +1,7 @@
+/*
 package Glavni;
 
-import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TableView;
-
+import Glavni.model.VoziloServis;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
@@ -40,3 +38,4 @@ public class Pretraga {
         tabelaEvidencija.setItems(filtriraniPodaci);
     }
 }
+*/

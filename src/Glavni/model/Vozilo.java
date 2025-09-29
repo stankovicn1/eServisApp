@@ -1,5 +1,5 @@
 
-package Glavni;
+package Glavni.model;
 
 public class Vozilo {
 

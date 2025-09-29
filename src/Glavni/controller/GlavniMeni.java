@@ -1,5 +1,8 @@
-package Glavni;
+package Glavni.controller;
 
+import Glavni.model.Servis;
+import Glavni.model.Vozilo;
+import Glavni.config.DbKonekcija;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +19,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static Glavni.UnosUBazu.unosServisa;
+import static Glavni.service.UnosUBazu.unosServisa;
 
 public class GlavniMeni {
     public Scene getscene3(Stage stage){  // Prozor za izbor jedne od opcija
@@ -105,7 +108,7 @@ public class GlavniMeni {
         stageServisera.setScene(scene);
         stageServisera.show();
     }
-    private ObservableList<Vozilo> uklonjenaVozila = FXCollections.observableArrayList();
+    private final ObservableList<Vozilo> uklonjenaVozila = FXCollections.observableArrayList();
 
     // Metoda koja otvara novi prozor sa podacima o vozilu
     private void otvoriProzorSaDetaljima(Vozilo vozilo, ObservableList<Vozilo> podaciIzBaze) {
@@ -166,43 +169,12 @@ public class GlavniMeni {
                         ex.printStackTrace();
                     }
 
-                    // Dohvati email iz tabele vozila
-                   /* try (Connection conn = DbKonekcija.getConnection()) {
-                        String emailQuery = "SELECT email FROM vozila WHERE id = ?";
-                        try (PreparedStatement stmt = conn.prepareStatement(emailQuery)) {
-                            stmt.setInt(1, vozilo.getId());
-                            ResultSet rs = stmt.executeQuery();
-                            if (rs.next()) {
-                                String email = rs.getString("email");
 
-                                // Pošaljite email ako je email dostupan
-                                if (email != null && !email.isEmpty()) {
-                                    String subject = "Potvrda obavljenog servisa za vozilo";
-                                    String message = "Vaše vozilo sa ID: " + vozilo.getId() + " je servisirano. Možete ga preuzeti.\n"
-                                            + "Opis servisa: " + opis + "\n"
-                                            + "Datum: " + datum;
 
-                                    try {
-                                        EmailSender.sendEmail(email, subject, message);
-                                        System.out.println("Poruka uspešno poslata na email: " + email);
-                                    } catch (Exception ex) {
-                                        System.out.println("Došlo je do greške prilikom slanja emaila: " + ex.getMessage());
-                                    }
-                                } else {
-                                    System.out.println("Email nije dostupan za vozilo ID=" + vozilo.getId());
-                                }
-                            } else {
-                                System.out.println("Email nije pronađen za vozilo ID=" + vozilo.getId());
-                            }
-                        }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }*/
-
-                    // Osveži tabelu da prikaze samo vozila sa naCekanju = 1
+                    // Osveži tabelu da prikaže samo vozila sa naCekanju = 1
                     osveziTabelu(podaciIzBaze);
 
-                    // Zatvori prozor nakon uspesnog unosa
+                    // Zatvori prozor nakon uspešnog unosa
                     noviProzor.close();
                 } else {
                     System.out.println("Došlo je do greške pri unosu servisa.");
@@ -232,10 +204,10 @@ public class GlavniMeni {
 
     private void osveziTabelu(ObservableList<Vozilo> podaciIzBaze) {
 
-        // Ocistite trenutnu listu podataka
+        // Očistite trenutnu listu podataka
         podaciIzBaze.clear();
 
-        // Ponovo ucitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
+        // Ponovo učitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila WHERE naCekanju = 1")) { // Samo vozila sa naCekanju = 1

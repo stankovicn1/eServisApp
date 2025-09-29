@@ -1,5 +1,6 @@
-package Glavni;
+package Glavni.controller;
 
+import Glavni.model.ProveraLozinke;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -67,7 +68,7 @@ public class LoginProzor {
     }
 
     // Metoda za prikaz iskačuće poruke (Alert dijalog)
-    void prikaziPoruku(String naslov, String poruka) {
+    public void prikaziPoruku(String naslov, String poruka) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);  // Tip poruke: informacija
         alert.setTitle(naslov);                                // Naslov dijaloga
         alert.setContentText(poruka);                          // Tekst poruke

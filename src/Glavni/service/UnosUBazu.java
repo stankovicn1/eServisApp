@@ -1,4 +1,8 @@
-package Glavni;
+package Glavni.service;
+
+import Glavni.config.DbKonekcija;
+import Glavni.model.Servis;
+import Glavni.model.Vozilo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,28 +1,29 @@
 package Glavni;
+
+import Glavni.db.DbKonekcija;
+import Glavni.gui.PocetniProzor;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     public static void main(String[] args) {
 
-        DbKonekcija.getConnection(); // Pozivanje singleton klase za konekciju
+        DbKonekcija.getConnection();
 
-        // Pokrece JavaFX aplikaciju
         launch(args);
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        PocetniProzor pocetak = new PocetniProzor();
 
-        PocetniProzor pocetak = new PocetniProzor(); // Kreira objekat klase MojGUI
-
-
-        primaryStage.setScene(pocetak.getscene(primaryStage)); // Postavlja prvu scenu kao pocetni prozor i prikazuje ga
+        primaryStage.setScene(pocetak.getscene(primaryStage));
         primaryStage.setTitle("eServis");
         primaryStage.show();
 
     }
+
     public void stop() {
         DbKonekcija.closeConnection();
-    } // Poziva metodu singleton klase za zatvaranje konekcije
+    }
 }

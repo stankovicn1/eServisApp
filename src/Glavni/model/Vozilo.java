@@ -1,5 +1,5 @@
 
-package Glavni;
+package Glavni.model;
 
 public class Vozilo {
 
@@ -14,8 +14,7 @@ public class Vozilo {
     private boolean naCekanju;
 
 
-    // Konstruktor za inicijalizaciju sa ID-jem
-    public Vozilo(int id, String klasa, String model, String godiste, String registracija,String kilometraza, String email, boolean naCekanju) {
+    public Vozilo(int id, String klasa, String model, String godiste, String registracija, String kilometraza, String email, boolean naCekanju) {
         this.id = id;
         this.klasa = klasa;
         this.model = model;
@@ -28,7 +27,7 @@ public class Vozilo {
 
     }
 
-    // Getteri
+
     public int getId() {
         return id;
     }
@@ -49,19 +48,19 @@ public class Vozilo {
         return registracija;
     }
 
-    public String getKilometraza(){
+    public String getKilometraza() {
         return kilometraza;
     }
 
     public String getEmail() {
         return email;
     }
-    public boolean isNaCekanju(){
+
+    public boolean isNaCekanju() {
         return true;
     }
 
 
-    // Setteri
     public void setId(int id) {
         this.id = id;
     }
@@ -78,7 +77,7 @@ public class Vozilo {
         this.godiste = godiste;
     }
 
-    public void setKilometraza(String kilometraza){
+    public void setKilometraza(String kilometraza) {
         this.kilometraza = kilometraza;
     }
 
@@ -90,7 +89,7 @@ public class Vozilo {
         this.email = email;
     }
 
-    public void setNaCekanju(boolean naCekanju){
+    public void setNaCekanju(boolean naCekanju) {
         this.naCekanju = naCekanju;
     }
 

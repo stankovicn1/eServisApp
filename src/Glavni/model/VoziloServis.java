@@ -1,6 +1,6 @@
-package Glavni;
+package Glavni.model;
 
-public class VoziloServis{
+public class VoziloServis {
     private int id;
     private String klasa;
     private String model;
@@ -10,7 +10,7 @@ public class VoziloServis{
     private String email;
     private String opisServis;
 
-    // Konstruktor
+
     public VoziloServis(int id, String klasa, String model, String godiste, String registracija, String kilometraza, String email, String opisServis) {
         this.id = id;
         this.klasa = klasa;
@@ -22,7 +22,6 @@ public class VoziloServis{
         this.opisServis = opisServis;
     }
 
-    // Getteri
     public int getId() {
         return id;
     }

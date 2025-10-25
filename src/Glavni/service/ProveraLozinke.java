@@ -1,6 +1,6 @@
-package Glavni.model;
+package Glavni.service;
 
-import Glavni.config.DbKonekcija;
+import Glavni.db.DbKonekcija;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,15 +10,15 @@ import java.sql.SQLException;
 public class ProveraLozinke {
 
     public boolean checkPassword(String password) {
-        try (Connection connection = DbKonekcija.getConnection(); // Kreiranje konekcije
-             PreparedStatement pstmt = connection.prepareStatement( // Priprema SQL upita
+        try (Connection connection = DbKonekcija.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(
                      "SELECT 1 FROM admintab WHERE ime = ? AND lozinka = ?")) {
 
             pstmt.setString(1, "admin");
             pstmt.setString(2, password);
 
-            try (ResultSet rs = pstmt.executeQuery()) { // Izvrsava upit i vraca rezultat u vidu ResultSet objekta
-                return rs.next(); // Vraca true ako postoji korisnik sa ovim podacima
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next();
             }
 
         } catch (SQLException e) {

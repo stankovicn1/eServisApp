@@ -1,8 +1,8 @@
-package Glavni.controller;
+package Glavni.gui;
 
 import Glavni.model.Servis;
 import Glavni.model.Vozilo;
-import Glavni.config.DbKonekcija;
+import Glavni.db.DbKonekcija;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,8 +22,8 @@ import java.util.Objects;
 import static Glavni.service.UnosUBazu.unosServisa;
 
 public class GlavniMeni {
-    public Scene getscene3(Stage stage){  // Prozor za izbor jedne od opcija
-        Button zaServisera = new Button("Servisi");
+    public Scene getscene3(Stage stage) {
+        Button zaServisera = new Button("Servisi na cekanju");
 
         Button unosServis = new Button("Novi unos");
 
@@ -33,11 +33,12 @@ public class GlavniMeni {
 
         EvidencijaProzor novi = new EvidencijaProzor();
         ProzorZaUnos ppzu = new ProzorZaUnos();
-        // Funkcionalnosti za button
+
         evidencija.setOnAction(e -> stage.setScene(novi.getSceneEvidencija(stage)));
         zaServisera.setOnAction(e -> otvoriProzorServisi());
         unosServis.setOnAction(e -> stage.setScene(ppzu.getscenaZaUnos(stage)));
         zatvori.setOnAction(e -> Platform.exit());
+
 
         VBox treciProzor = new VBox(35, zaServisera, unosServis, evidencija, zatvori);
         treciProzor.setAlignment(Pos.CENTER);
@@ -46,49 +47,50 @@ public class GlavniMeni {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         return scene;
     }
-    private TableView<Vozilo> tabelaServisa; // Deklaracija tabele
+
+    private TableView<Vozilo> tabelaServisa;
 
     private void otvoriProzorServisi() {
-        // Inicijalizacija tabele
-        tabelaServisa = new TableView<>(); // Kreira novu instancu TableView za prikaz podataka
 
-        // Kreira listu koja ce cuvati podatke iz baze
+        tabelaServisa = new TableView<>();
+
+
         ObservableList<Vozilo> podaciIzBaze = FXCollections.observableArrayList();
 
-        // Dobavljanje podataka iz baze
+
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila where naCekanju = 1")) { // SQL upit za dobijanje podataka o vozilima
 
-            // Petlja kroz rezultate upita
+
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String model = rs.getString("model");
                 String registracija = rs.getString("registracija");
 
-                // Kreira objekat vozilo sa ucitanim podacima
-                Vozilo vozilo = new Vozilo(id, "", model, "", registracija,"", "",true);
-                podaciIzBaze.add(vozilo); // Dodaje vozilo u listu podataka
+
+                Vozilo vozilo = new Vozilo(id, "", model, "", registracija, "", "", true);
+                podaciIzBaze.add(vozilo);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // Kreiranje kolona za tabelu
+
         TableColumn<Vozilo, String> modelColumn = new TableColumn<>("Model");
         modelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
 
         TableColumn<Vozilo, String> registracijaColumn = new TableColumn<>("Registracija");
         registracijaColumn.setCellValueFactory(new PropertyValueFactory<>("registracija"));
 
-        // Dodavanje kolona u tabelu
+
         tabelaServisa.getColumns().addAll(modelColumn, registracijaColumn);
         tabelaServisa.setItems(podaciIzBaze);
 
-        // Dodavanje detekcije duplog klika
+
         tabelaServisa.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Provera da li je kliknut dupli klik
+            if (event.getClickCount() == 2) {
                 Vozilo selectedVozilo = tabelaServisa.getSelectionModel().getSelectedItem();
                 if (selectedVozilo != null) {
                     otvoriProzorSaDetaljima(selectedVozilo, podaciIzBaze);
@@ -96,7 +98,7 @@ public class GlavniMeni {
             }
         });
 
-        // Kreiranje prozora
+
         Stage stageServisera = new Stage();
         stageServisera.setTitle("Vozila na cekanju");
 
@@ -108,20 +110,21 @@ public class GlavniMeni {
         stageServisera.setScene(scene);
         stageServisera.show();
     }
+
     private final ObservableList<Vozilo> uklonjenaVozila = FXCollections.observableArrayList();
 
-    // Metoda koja otvara novi prozor sa podacima o vozilu
+
     private void otvoriProzorSaDetaljima(Vozilo vozilo, ObservableList<Vozilo> podaciIzBaze) {
         Stage noviProzor = new Stage();
         noviProzor.setTitle("Detalji o vozilu");
 
-        // Kreiranje labela za prikaz podataka
+
         Label modelLabel = new Label("Model: " + vozilo.getModel());
         Label registracijaLabel = new Label("Registracija: " + vozilo.getRegistracija());
         modelLabel.setFont(Font.font(18));
         registracijaLabel.setFont(Font.font(18));
 
-        // Labela i TextArea za unos opisa
+
         Label opisLab = new Label("Unesite opis servisa");
         opisLab.setFont(Font.font(18));
         TextArea opiis = new TextArea();
@@ -134,11 +137,11 @@ public class GlavniMeni {
         opiis.setMaxHeight(100);
         opiis.setMinHeight(75);
 
-        // Dodavanje DatePicker-a za odabir datuma
-        Label datumLab = new Label("Odaberite datum servisa");
-        DatePicker datePicker = new DatePicker();  // Kreiranje DatePicker-a
 
-        // Dugme za potvrdu
+        Label datumLab = new Label("Odaberite datum servisa");
+        DatePicker datePicker = new DatePicker();
+
+
         Button potvrdiButton = new Button("Potvrdi");
         potvrdiButton.setStyle("-fx-font-family: 'Arial'; -fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: linear-gradient(to bottom, #40c6de, #2a9ebd); -fx-border-color: #1d7687; -fx-border-width: 2px; -fx-border-radius: 25px; -fx-background-radius: 25px; -fx-padding: 10px 20px; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.3, 0, 2);");
 
@@ -148,17 +151,17 @@ public class GlavniMeni {
             LocalDate datum = datePicker.getValue();
 
             if (datum != null && !opis.isEmpty()) {
-                // Kreiraj Servis objekat sa unesenim podacima
+
                 Servis servis = new Servis(0, opis, datum.toString(), vozilo.getId());
 
-                // Pozivanje metode za unos servisa
+
                 boolean uspeh = unosServisa(servis);
                 if (uspeh) {
                     System.out.println("Uspešno ste uneli servis.");
-                    // Uklonite vozilo iz trenutne liste podataka
+
                     podaciIzBaze.remove(vozilo);
 
-                    // Azurira vrednost naCekanju u bazi na 0
+
                     try (Connection conn = DbKonekcija.getConnection()) {
                         String updateQuery = "UPDATE vozila SET naCekanju = 0 WHERE id = ?";
                         try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
@@ -170,11 +173,9 @@ public class GlavniMeni {
                     }
 
 
-
-                    // Osveži tabelu da prikaže samo vozila sa naCekanju = 1
                     osveziTabelu(podaciIzBaze);
 
-                    // Zatvori prozor nakon uspešnog unosa
+
                     noviProzor.close();
                 } else {
                     System.out.println("Došlo je do greške pri unosu servisa.");
@@ -185,45 +186,40 @@ public class GlavniMeni {
         });
 
 
-
-
-
-
-
-        // Dodavanje svih elemenata u layout
         VBox layout = new VBox(10);
         layout.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(modelLabel, registracijaLabel, opisLab, opiis, datumLab, datePicker, potvrdiButton);
 
-        // Kreiranje scene
+
         Scene scene = new Scene(layout, 800, 500);
-        //scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         noviProzor.setScene(scene);
         noviProzor.show();
     }
 
     private void osveziTabelu(ObservableList<Vozilo> podaciIzBaze) {
 
-        // Očistite trenutnu listu podataka
         podaciIzBaze.clear();
 
-        // Ponovo učitajte podatke iz baze, filtrirajući samo vozila sa naCekanju = 1
         try (Connection conn = DbKonekcija.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila WHERE naCekanju = 1")) { // Samo vozila sa naCekanju = 1
+             ResultSet rs = stmt.executeQuery("SELECT id, model, registracija FROM vozila WHERE naCekanju = 1")) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String model = rs.getString("model");
                 String registracija = rs.getString("registracija");
 
-                // Kreira objekat vozilo sa učitanim podacima
+
                 Vozilo vozilo = new Vozilo(id, "", model, "", registracija, "", "", true);
-                podaciIzBaze.add(vozilo); // Dodajte vozilo u listu
+                podaciIzBaze.add(vozilo);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
 }
+
+
+

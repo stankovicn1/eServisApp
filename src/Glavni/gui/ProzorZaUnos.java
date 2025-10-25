@@ -1,5 +1,5 @@
 
-package Glavni.controller;
+package Glavni.gui;
 
 import Glavni.service.UnosUBazu;
 import Glavni.model.Vozilo;
@@ -12,27 +12,26 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class ProzorZaUnos {
-    public Scene getscenaZaUnos(Stage stage){
-        //Prozor za Novi unos
+    public Scene getscenaZaUnos(Stage stage) {
 
-        // Label za marku automobila
+
         Label markaL = new Label("Izaberite klasu");
 
-        // ComboBox za marku automobila
+
         ComboBox<String> klasa = new ComboBox<>();
         klasa.getItems().addAll("V", "S", "XC");
         klasa.setPromptText("Izaberite klasu automobila");
 
-        // Label za model automobila
+
         Label modelL = new Label("Izaberite model");
 
-        // ComboBox za model automobila
+
         ComboBox<String> model = new ComboBox<>();
         model.setPromptText("Izaberite model automobila");
 
-        // Dodavanje primera modela u zavisnosti od marke
+
         klasa.setOnAction(e -> {
-            model.getItems().clear(); // Očisti prethodne opcije
+            model.getItems().clear();
             String selectedBrand = klasa.getValue();
             if ("V".equals(selectedBrand)) {
                 model.getItems().addAll("V 40");
@@ -96,35 +95,18 @@ public class ProzorZaUnos {
         email.setMinWidth(150);
 
 
-/*// Dodavanje stilskih klasa
-        godiste.getStyleClass().add("godiste-textfield");
-        registracija.getStyleClass().add("registracija-textfield");
-        kilometraza.getStyleClass().add("kilometraza-textfield");
-        email.getStyleClass().add("email-textarea");
-
-// Dodavanje stilskih klasa za labele
-        godisteL.getStyleClass().add("small-label");
-        registracijaL.getStyleClass().add("small-label");
-        kilometrazaL.getStyleClass().add("small-label");
-        emailL.getStyleClass().add("small-label");*/
-
-
-
-
-
-// Dodavanje dugmadi
         Button nazad = new Button("Nazad");
         Button unos = new Button("Potvrdi");
 
         GlavniMeni proz = new GlavniMeni();
-// Akcija dugmeta "Nazad"
+
         nazad.setOnAction(e -> stage.setScene(proz.getscene3(stage)));
 
         LoginProzor pzul = new LoginProzor();
-// Akcija dugmeta "Unos"
+
         unos.setOnAction(e -> {
             try {
-                // Dohvata vrednosti iz polja
+
                 String izabranaKlasa = klasa.getValue();
                 String izabraniModel = model.getValue();
                 String unesenoGodiste = godiste.getText();
@@ -134,35 +116,34 @@ public class ProzorZaUnos {
                 Boolean naCekanju = true;
 
 
-                // Provera obaveznih polja
                 if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty()) {
                     pzul.prikaziPoruku("Greška", "Molimo popunite obavezna polja.");
                     return;
                 }
 
-                // Provera validnosti godine
+
                 if (!unesenoGodiste.matches("\\d{4}") || Integer.parseInt(unesenoGodiste) < 1920 || Integer.parseInt(unesenoGodiste) > 2100) {
                     pzul.prikaziPoruku("Greška", "Godiste mora biti u rasponu od 1920 do 2100.");
                     return;
                 }
 
-                // Provera validnosti registarskih oznaka
+
                 if (!unesenaRegistracija.matches("[A-Za-z]{2}-\\d{2,5}-[A-Za-z]{2}")) {
                     pzul.prikaziPoruku("Greška", "Registarske oznake moraju biti u formatu (XX-1234-XX).");
                     return;
                 }
 
-                // Provera validnosti email adrese
+
                 String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,6}$";
                 if (!uneseniEmail.matches(emailRegex)) {
                     pzul.prikaziPoruku("Greška", "Email mora biti u validnom formatu (npr. ime@example.com).");
                     return;
                 }
 
-                // Kreiramo objekat vozila i unosimo ga u bazu
+
                 int generisanId = 0;
                 Vozilo novoVozilo = new Vozilo(
-                        generisanId,           // Prosledjujemo generisan ID
+                        generisanId,
                         izabranaKlasa,
                         izabraniModel,
                         unesenoGodiste,
@@ -172,10 +153,10 @@ public class ProzorZaUnos {
                         naCekanju
                 );
 
-                // Pozivamo metodu za unos u bazu
+
                 boolean unosUspesan = UnosUBazu.unosVozila(novoVozilo);
 
-                // Obavestavamo korisnika o uspešnom unosu ili grešci
+
                 if (unosUspesan) {
                     pzul.prikaziPoruku("Uspešno", "Vozilo je uspešno uneto u bazu.");
                 } else {
@@ -188,11 +169,10 @@ public class ProzorZaUnos {
         });
 
 
-
-        VBox noviUnos = new VBox(15,  markaL,klasa, modelL, model, godisteL, godiste, registracijaL,registracija, kilometrazaL, kilometraza /*datumL,datum, opisL, opis*/,emailL,email, unos, nazad);
+        VBox noviUnos = new VBox(15, markaL, klasa, modelL, model, godisteL, godiste, registracijaL, registracija, kilometrazaL, kilometraza /*datumL,datum, opisL, opis*/, emailL, email, unos, nazad);
         noviUnos.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(noviUnos, 700, 600); // Vaš VBox ili drugi layout
+        Scene scene = new Scene(noviUnos, 700, 600);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
 
         return scene;

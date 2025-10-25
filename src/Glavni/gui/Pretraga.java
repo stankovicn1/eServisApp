@@ -1,4 +1,4 @@
-/*
+/* Klasa ostavljena mozda se nekad upotrebi, bila je ranije opcija pretrage cele baze po svim kriterijumima pa je to izbaceno
 package Glavni;
 
 import Glavni.model.VoziloServis;
@@ -8,18 +8,18 @@ import javafx.scene.control.TableView;
 
 public class Pretraga {
 
-    // Generička metoda koja radi sa bilo kojim tipom objekta
+
     public static <T> void inicijalizujPretragu(TextField pretragaField, FilteredList<T> filtriraniPodaci, TableView<T> tabelaEvidencija) {
         pretragaField.setPromptText("Pretraži po bilo kom polju");
 
         pretragaField.textProperty().addListener((observable, oldValue, newValue) -> {
             filtriraniPodaci.setPredicate(item -> {
                 if (newValue == null || newValue.isEmpty()) {
-                    return true; // Prikaz svih podataka ako polje za pretragu nije popunjeno
+                    return true;
                 }
                 String filter = newValue.toLowerCase();
 
-                // Prilagoditi za svaki objekat u zavisnosti od tipa
+
                 if (item instanceof VoziloServis) {
                     VoziloServis vozilo = (VoziloServis) item;
                     return vozilo.getKlasa().toLowerCase().contains(filter) ||
@@ -34,7 +34,7 @@ public class Pretraga {
             });
         });
 
-        // Povezivanje filtriranih podataka sa tabelom
+
         tabelaEvidencija.setItems(filtriraniPodaci);
     }
 }

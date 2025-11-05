@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class PocetniProzor {
     public Scene getscene(Stage stage) {
-        Label label = new Label("eServisnaKnjizica Volvo Servis");
+        Label label = new Label("Elektronska servisna knjiga");
 
         label.getStyleClass().add("large-label");
 

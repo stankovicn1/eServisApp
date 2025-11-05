@@ -13,7 +13,7 @@ public class DbKonekcija {
     public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/EServisnaknjigaMercedes", "root", "");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eservis", "root", "");
             }
         } catch (SQLException e) {
             System.err.println("Greska prilikom koneckcije na bazu " + e.getMessage());

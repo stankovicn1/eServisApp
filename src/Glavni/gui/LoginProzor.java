@@ -41,7 +41,7 @@ public class LoginProzor {
             if (proveraLozinke.checkPassword(unesenaLozinka)) {
                 stage.setScene(prozorzaopcije.getscene3(stage));
             } else {
-                prikaziPoruku("Greška", "Pogrešna lozinka.");
+                prikaziPoruku("Greska", "Pogresna lozinka.");
             }
         });
 

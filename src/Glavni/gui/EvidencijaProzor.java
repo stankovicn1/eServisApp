@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.Objects;
 
 public class EvidencijaProzor {
@@ -77,7 +78,7 @@ public class EvidencijaProzor {
                 lblReg.setText("Registracija: " + rs.getString("registracija"));
                 lblEmail.setText("Email: " + rs.getString("email"));
             } else {
-                lblKlasa.setText("Nije pronađeno vozilo sa unetom registracijom!");
+                lblKlasa.setText("Nije pronadjeno vozilo sa unetom registracijom");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,19 +108,26 @@ public class EvidencijaProzor {
 
         TableView<VoziloServis> tabela = new TableView<>();
 
-        TableColumn<VoziloServis, String> opisServisColumn = new TableColumn<>("Opis Servisa");
+        TableColumn<VoziloServis, String> opisServisColumn = new TableColumn<>("Opis servisa");
         opisServisColumn.setCellValueFactory(new PropertyValueFactory<>("opisServis"));
 
         TableColumn<VoziloServis, String> kilometrazaColumn = new TableColumn<>("Kilometraža");
         kilometrazaColumn.setCellValueFactory(new PropertyValueFactory<>("kilometraza"));
 
-        tabela.getColumns().addAll(opisServisColumn, kilometrazaColumn);
+        TableColumn<VoziloServis, Date> datumColumn = new TableColumn<>("Datum");
+        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
+
+        // ===== Nova kolona za cenu =====
+        TableColumn<VoziloServis, Double> cenaColumn = new TableColumn<>("Cena (RSD)");
+        cenaColumn.setCellValueFactory(new PropertyValueFactory<>("cena"));  // mora postojati getCena() u VoziloServis
+
+        tabela.getColumns().addAll(opisServisColumn, kilometrazaColumn, datumColumn, cenaColumn);
 
         ObservableList<VoziloServis> rezultat = FXCollections.observableArrayList();
 
         try (Connection conn = DbKonekcija.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT s.opisServis, v.kilometraza " +
+                     "SELECT s.opisServis, v.kilometraza, s.datum, s.cena " +
                              "FROM servis s " +
                              "JOIN vozila v ON v.id = s.vozilo_id " +
                              "WHERE v.registracija = ?")) {
@@ -130,7 +138,9 @@ public class EvidencijaProzor {
             while (rs.next()) {
                 String opis = rs.getString("opisServis");
                 String km = rs.getString("kilometraza");
-                rezultat.add(new VoziloServis(0, "", "", "", registracija, km, "", opis));
+                Date datum = rs.getDate("datum");
+                double cena = rs.getDouble("cena"); // preuzimanje cene
+                rezultat.add(new VoziloServis(0, "", "", "", registracija, km, "", opis, datum, cena));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,10 +153,11 @@ public class EvidencijaProzor {
 
         VBox layout = new VBox(15, tabela, nazadButton);
         layout.setPadding(new Insets(20));
-        layout.setAlignment(Pos.CENTER); // <--- centriranje
+        layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout, 700, 400);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         return scene;
     }
+
 }

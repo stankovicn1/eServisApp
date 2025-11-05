@@ -15,7 +15,7 @@ public class ProzorZaUnos {
     public Scene getscenaZaUnos(Stage stage) {
 
 
-        Label markaL = new Label("Izaberite klasu");
+        Label markaL = new Label("Volvo - izaberite klasu");
 
 
         ComboBox<String> klasa = new ComboBox<>();
@@ -117,26 +117,26 @@ public class ProzorZaUnos {
 
 
                 if (izabranaKlasa == null || izabraniModel == null || unesenaRegistracija.isEmpty()) {
-                    pzul.prikaziPoruku("Greška", "Molimo popunite obavezna polja.");
+                    pzul.prikaziPoruku("Greska", "Molimo popunite obavezna polja.");
                     return;
                 }
 
 
                 if (!unesenoGodiste.matches("\\d{4}") || Integer.parseInt(unesenoGodiste) < 1920 || Integer.parseInt(unesenoGodiste) > 2100) {
-                    pzul.prikaziPoruku("Greška", "Godiste mora biti u rasponu od 1920 do 2100.");
+                    pzul.prikaziPoruku("Greska", "Godiste mora biti u rasponu od 1920 do 2100.");
                     return;
                 }
 
 
                 if (!unesenaRegistracija.matches("[A-Za-z]{2}-\\d{2,5}-[A-Za-z]{2}")) {
-                    pzul.prikaziPoruku("Greška", "Registarske oznake moraju biti u formatu (XX-1234-XX).");
+                    pzul.prikaziPoruku("Greska", "Registarske oznake moraju biti u formatu (XX-1234-XX).");
                     return;
                 }
 
 
-                String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,6}$";
-                if (!uneseniEmail.matches(emailRegex)) {
-                    pzul.prikaziPoruku("Greška", "Email mora biti u validnom formatu (npr. ime@example.com).");
+                String emailProvera = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,6}$";
+                if (!uneseniEmail.matches(emailProvera)) {
+                    pzul.prikaziPoruku("Greska", "Email mora biti u validnom formatu (npr. ime@example.com).");
                     return;
                 }
 
@@ -158,13 +158,13 @@ public class ProzorZaUnos {
 
 
                 if (unosUspesan) {
-                    pzul.prikaziPoruku("Uspešno", "Vozilo je uspešno uneto u bazu.");
+                    pzul.prikaziPoruku("Uspesno", "Vozilo je uspesno uneto u bazu.");
                 } else {
-                    pzul.prikaziPoruku("Greška", "Došlo je do greške pri unosu podataka.");
+                    pzul.prikaziPoruku("Greska", "Doslo je do greske pri unosu podataka.");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                pzul.prikaziPoruku("Greška", "Došlo je do greške: " + ex.getMessage());
+                pzul.prikaziPoruku("Greska", "Doslo je do greske: " + ex.getMessage());
             }
         });
 

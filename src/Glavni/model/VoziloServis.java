@@ -1,5 +1,7 @@
 package Glavni.model;
 
+import java.util.Date;
+
 public class VoziloServis {
     private int id;
     private String klasa;
@@ -9,9 +11,11 @@ public class VoziloServis {
     private String kilometraza;
     private String email;
     private String opisServis;
+    private Date datum;
+    private double cena;
 
-
-    public VoziloServis(int id, String klasa, String model, String godiste, String registracija, String kilometraza, String email, String opisServis) {
+    public VoziloServis(int id, String klasa, String model, String godiste, String registracija,
+                        String kilometraza, String email, String opisServis, Date datum, double cena) {
         this.id = id;
         this.klasa = klasa;
         this.model = model;
@@ -20,6 +24,8 @@ public class VoziloServis {
         this.kilometraza = kilometraza;
         this.email = email;
         this.opisServis = opisServis;
+        this.datum = datum;
+        this.cena = cena;
     }
 
     public int getId() {
@@ -53,4 +59,9 @@ public class VoziloServis {
     public String getOpisServis() {
         return opisServis;
     }
+
+    public Date getDatum() {
+        return datum;
+    }
+    public double getCena(){return cena;}
 }

@@ -54,22 +54,22 @@ public class UnosUBazu {
 
     public static boolean unosServisa(Servis servis) {
 
-        String sql = "INSERT INTO servis (opisServis, datum, vozilo_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO servis (opisServis, datum, vozilo_id, tip_servisa, sledeca_kilometraza, cena) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection konekcija = DbKonekcija.getConnection();
              PreparedStatement stmt = konekcija.prepareStatement(sql)) {
 
-
             stmt.setString(1, servis.getOpisServis());
             stmt.setString(2, servis.getDatum());
             stmt.setInt(3, servis.getVoziloId());
-
+            stmt.setString(4, servis.getTipServisa());
+            stmt.setInt(5, servis.getSledecaKilometraza());
+            stmt.setDouble(6, servis.getCena());
 
             int rezultat = stmt.executeUpdate();
 
-
             if (rezultat > 0) {
-
+                // Ovaj blok se moze koristiti u slucaju da se nadalje implementira slanje obavestenja putem email-a
                 String emailSql = "SELECT email, model, registracija FROM vozila WHERE id = ?";
                 try (PreparedStatement emailStmt = konekcija.prepareStatement(emailSql)) {
                     emailStmt.setInt(1, servis.getVoziloId());

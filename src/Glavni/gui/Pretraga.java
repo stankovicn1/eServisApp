@@ -1,4 +1,8 @@
-/* Klasa ostavljena mozda se nekad upotrebi, bila je ranije opcija pretrage cele baze po svim kriterijumima pa je to izbaceno
+/*
+
+Klasa ostavljena, mozda se nekad upotrebi
+
+
 package Glavni;
 
 import Glavni.model.VoziloServis;
@@ -10,7 +14,7 @@ public class Pretraga {
 
 
     public static <T> void inicijalizujPretragu(TextField pretragaField, FilteredList<T> filtriraniPodaci, TableView<T> tabelaEvidencija) {
-        pretragaField.setPromptText("Pretraži po bilo kom polju");
+        pretragaField.setPromptText("Pretrazi po bilo kom polju");
 
         pretragaField.textProperty().addListener((observable, oldValue, newValue) -> {
             filtriraniPodaci.setPredicate(item -> {
@@ -33,7 +37,6 @@ public class Pretraga {
                 return false;
             });
         });
-
 
         tabelaEvidencija.setItems(filtriraniPodaci);
     }
